@@ -17,7 +17,7 @@ public class SchoolYearController {
     private SchoolYearService schoolYearService;
 
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getSchoolYears(
             @RequestParam (defaultValue = "0") int page,
             @RequestParam (defaultValue = "10") int size) {
@@ -42,5 +42,11 @@ public class SchoolYearController {
     public ResponseEntity<?> deleteSchoolYear(@PathVariable Long id) {
         schoolYearService.deleteSchoolYear(id);
         return ResponseEntity.ok(new ApiResponse<>(200, "School year deleted successfully"));
+    }
+
+    @PutMapping("/soft-delete/{id}")
+    public ResponseEntity<?> softDeleteSchoolYear(@PathVariable Long id) {
+        schoolYearService.softDeleteSchoolYear(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "School year soft deleted successfully"));
     }
 }

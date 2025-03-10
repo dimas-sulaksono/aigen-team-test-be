@@ -87,7 +87,19 @@ public class SchoolYearService {
         }
     }
 
-
+    public void softDeleteSchoolYear(Long id) {
+        try {
+            SchoolYear existingSchoolYear = schoolYearRepository.findById(id)
+                    .orElseThrow(() -> new DataNotFoundException("School year not found: " + id));
+            existingSchoolYear.setDeletedAt(java.time.LocalDateTime.now());
+            existingSchoolYear = schoolYearRepository.save(existingSchoolYear);
+            convertToResponse(existingSchoolYear);
+        } catch (DataNotFoundException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to soft delete school year", e);
+        }
+    }
 
     private SchoolYearResponse convertToResponse(SchoolYear schoolYear) {
         SchoolYearResponse response = new SchoolYearResponse();
@@ -95,6 +107,7 @@ public class SchoolYearService {
         response.setSchoolYear(schoolYear.getSchoolYear());
         response.setStartDate(schoolYear.getStartDate());
         response.setEndDate(schoolYear.getEndDate());
+        response.setDeletedAt(schoolYear.getDeletedAt());
         return response;
     }
 }
