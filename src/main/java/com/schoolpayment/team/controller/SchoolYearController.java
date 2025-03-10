@@ -26,15 +26,21 @@ public class SchoolYearController {
         return ResponseEntity.ok(new ApiResponse<>(200, response));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> createSchoolYear(@RequestBody @Valid SchoolYearRequest schoolYear) {
         SchoolYearResponse response = schoolYearService.createSchoolYear(schoolYear);
         return ResponseEntity.ok(new ApiResponse<>(200, response));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateSchoolYear(@PathVariable Long id, @RequestBody @Valid SchoolYearRequest schoolYear) {
         SchoolYearResponse response = schoolYearService.updateSchoolYear(id, schoolYear);
         return ResponseEntity.ok(new ApiResponse<>(200, response));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteSchoolYear(@PathVariable Long id) {
+        schoolYearService.deleteSchoolYear(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "School year deleted successfully"));
     }
 }
