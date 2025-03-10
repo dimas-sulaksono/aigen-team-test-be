@@ -75,6 +75,18 @@ public class SchoolYearService {
         }
     }
 
+    public void deleteSchoolYear(Long id) {
+        try{
+            SchoolYear existingSchoolYear = schoolYearRepository.findById(id)
+                    .orElseThrow(() -> new DataNotFoundException("School year not found: " + id));
+            schoolYearRepository.delete(existingSchoolYear);
+        }catch (DataNotFoundException e){
+            throw new RuntimeException(e.getMessage(), e);
+        }catch (Exception e) {
+            throw new RuntimeException("Failed to delete school year", e);
+        }
+    }
+
 
 
     private SchoolYearResponse convertToResponse(SchoolYear schoolYear) {
