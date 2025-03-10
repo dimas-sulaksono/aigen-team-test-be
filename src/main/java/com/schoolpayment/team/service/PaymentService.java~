@@ -75,13 +75,6 @@ public class PaymentService {
         return payments.map(this::convertToResponse);
     }
 
-    public PaymentResponse updateStatusPayment(Long id, String status) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Payment not found"));
-        payment.setPaymentStatus(status);
-        Payment updatedPayment = paymentRepository.save(payment);
-        return convertToResponse(updatedPayment);
-    }
-
 
 
     private PaymentResponse convertToResponse(Payment payment) {
