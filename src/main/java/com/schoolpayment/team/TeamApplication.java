@@ -8,7 +8,7 @@ public class TeamApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TeamApplication.class, args);
-		System.out.println("============ SERVER STARTED ============");
+		System.out.println("============ SERVER STARTED p2 ============");
 	}
 
 }
