@@ -1,10 +1,16 @@
 package com.schoolpayment.team.service;
 
+import com.schoolpayment.team.dto.request.PaymentRequest;
 import com.schoolpayment.team.dto.response.PaymentResponse;
 import com.schoolpayment.team.exception.DataNotFoundException;
 import com.schoolpayment.team.model.Payment;
+import com.schoolpayment.team.model.PaymentType;
+import com.schoolpayment.team.model.Student;
 import com.schoolpayment.team.model.User;
 import com.schoolpayment.team.repository.PaymentRepository;
+import com.schoolpayment.team.repository.PaymentTypeRepository;
+import com.schoolpayment.team.repository.StudentRepository;
+import com.schoolpayment.team.repository.UserRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +27,10 @@ import java.util.List;
 public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private PaymentTypeRepository paymentTypeRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     public Page<PaymentResponse> getAllPayment(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -99,6 +109,24 @@ public class PaymentService {
         Page<Payment> payments = paymentRepository.findAll(spec, pageable);
         return payments.map(this::convertToResponse);
 
+    }
+
+    public PaymentResponse createPayment(PaymentRequest request, User user) {
+
+        PaymentType paymentType = paymentTypeRepository.findByPaymentTypeName(request.getPaymentType()).orElseThrow(() -> new DataNotFoundException("Payment type not found"));
+        Student student = studentRepository.findByNis(user.getNis()).orElseThrow(() -> new DataNotFoundException("Student not found"));
+
+        Payment payment = new Payment();
+        payment.setPaymentName(request.getPaymentName());
+        payment.setAmount(request.getAmount());
+        payment.setPaymentStatus(request.getPaymentStatus());
+        payment.setDescription(request.getDescription());
+        payment.setUser(user);
+        payment.setStudent(student);
+        payment.setPaymentType(paymentType);
+
+        Payment savedPayment = paymentRepository.save(payment);
+        return convertToResponse(savedPayment);
     }
 
 
