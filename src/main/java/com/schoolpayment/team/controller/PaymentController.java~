@@ -24,14 +24,14 @@ public class PaymentController {
         return paymentService.getPaymentById(id);
     }
 
-//    @GetMapping("/filter")
-//    public Page<PaymentResponse> getPaymentByFilter(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) String student,
-//            @RequestParam(required = false) String username,
-//            @RequestParam(required = false) String year,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "5") int size) {
-//        return paymentService.filterPayment(name, student, username, year, page, size);
-//    }
+    @GetMapping("/filter")
+    public Page<PaymentResponse> getPaymentByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String student,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String year,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return paymentService.filterPayment(name, student, username, year, page, size);
+    }
 }
