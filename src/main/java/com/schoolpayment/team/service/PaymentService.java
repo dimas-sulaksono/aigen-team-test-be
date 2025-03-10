@@ -49,7 +49,7 @@ public class PaymentService {
             }
 
             if (userName != null) {
-                predicates.add(criteriaBuilder.like(root.get("user"), "%" + userName + "%"));
+                predicates.add(criteriaBuilder.like(root.get("user").get("name"), "%" + userName + "%"));
             }
             if (schoolYear != null) {
                 predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
