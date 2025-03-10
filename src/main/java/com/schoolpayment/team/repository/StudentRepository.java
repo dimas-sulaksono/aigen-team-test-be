@@ -24,5 +24,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s FROM Student s WHERE s.createdAt >= :startDate AND s.createdAt <= :endDate")
     Page<Student> findBySchoolYear(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
-    void softDeleteById(Long id);
 }

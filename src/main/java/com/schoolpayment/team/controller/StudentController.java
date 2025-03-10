@@ -3,6 +3,7 @@ package com.schoolpayment.team.controller;
 import com.schoolpayment.team.dto.request.StudentRequest;
 import com.schoolpayment.team.dto.response.StudentResponse;
 import com.schoolpayment.team.service.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,10 @@ import java.time.LocalDate;
 @RequestMapping("/api/student")
 public class StudentController {
 
-    private final StudentService studentService;
+    @Autowired
+    private StudentService studentService;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
+
 
     // ✅ Get all students with pagination
     @GetMapping
@@ -78,7 +78,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentsSortedByName( sort,page, size));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/soft-delete/{id}")
     public ResponseEntity<String> softDeleteStudent(@PathVariable Long id) {
         try {
             studentService.softDeleteStudent(id);
