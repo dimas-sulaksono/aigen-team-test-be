@@ -80,6 +80,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/order-history").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/order-history/**").permitAll()
 
+                        // school years
+                        .requestMatchers(HttpMethod.GET,"/api/school-years/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/school-years/**").permitAll()
+
                         //.anyRequest().authenticated()
                         .anyRequest().permitAll()
                 )
