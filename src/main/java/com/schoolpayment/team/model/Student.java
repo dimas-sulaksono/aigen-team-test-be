@@ -60,4 +60,14 @@ public class Student {
 
     @PreUpdate
     public void onUpdate() { updatedAt = LocalDateTime.now(); }
+
+    public int getClassId() {
+        if (classEntity != null) {
+            return classEntity.getId().intValue();
+        }
+        return 0;
+    }
+
+    public void setClassId(int classId) {
+    }
 }

@@ -62,6 +62,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/payment-type/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/payment-type/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/payment-type/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET,"/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/product/**").permitAll()
 
                         // school years
                         .requestMatchers(HttpMethod.GET,"/api/school-years/all").permitAll()
