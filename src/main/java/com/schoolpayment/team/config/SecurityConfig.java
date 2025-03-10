@@ -65,6 +65,7 @@ public class SecurityConfig {
 
                         // school years
                         .requestMatchers(HttpMethod.GET,"/api/school-years/all").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/school-years/search").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/school-years/add").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/school-years/update").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/school-years/soft-delete").permitAll()
