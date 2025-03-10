@@ -5,7 +5,6 @@ import com.schoolpayment.team.dto.response.PaymentResponse;
 import com.schoolpayment.team.model.Payment;
 import com.schoolpayment.team.security.CustomUserDetails;
 import com.schoolpayment.team.service.PaymentService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -68,7 +67,7 @@ public class PaymentController {
 
     @PostMapping("/add")
     public PaymentResponse addPayment(
-            @Valid @RequestBody PaymentRequest request,
+            @RequestBody PaymentRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         return paymentService.createPayment(request, userDetails.getUser());
     }
