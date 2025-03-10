@@ -49,4 +49,13 @@ public class SchoolYearController {
         schoolYearService.softDeleteSchoolYear(id);
         return ResponseEntity.ok(new ApiResponse<>(200, "School year soft deleted successfully"));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchSchoolYear(
+            @RequestParam String years,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Page<SchoolYearResponse> response = schoolYearService.getSearch(years, page, size);
+        return ResponseEntity.ok(new ApiResponse<>(200, response));
+    }
 }

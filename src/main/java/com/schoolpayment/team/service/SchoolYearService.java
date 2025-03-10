@@ -101,6 +101,21 @@ public class SchoolYearService {
         }
     }
 
+
+    public Page<SchoolYearResponse> getSearch(String schoolYear, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<SchoolYear> schoolYears = schoolYearRepository.findBySchoolYearContainingAndDeletedAtIsNull(schoolYear, pageable);
+            if (!schoolYears.isEmpty()) {
+                return schoolYears.map(this::convertToResponse);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve active school years");
+        }
+    }
+
     private SchoolYearResponse convertToResponse(SchoolYear schoolYear) {
         SchoolYearResponse response = new SchoolYearResponse();
         response.setId(schoolYear.getId());
