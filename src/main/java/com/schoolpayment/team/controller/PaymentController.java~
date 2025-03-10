@@ -34,4 +34,7 @@ public class PaymentController {
             @RequestParam(defaultValue = "5") int size) {
         return paymentService.filterPayment(name, student, username, year, page, size);
     }
+
+    @GetMapping("/name/{name}")
+    
 }
