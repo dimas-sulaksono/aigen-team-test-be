@@ -13,28 +13,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "payment_type")
+public class PaymentType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "payment_type_id")
     private Long id;
 
-    @Column(name = "nis", length = 17, nullable = false)
-    private String nis;
-
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @Column(name = "payment_type_name", nullable = false, unique = true, length = 255)
+    private String paymentTypeName;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -46,11 +34,6 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    // Relasi dengan Student
-    @ManyToOne
-    @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)
-    private Student student;
 
     @PrePersist
     public void onCreate() {

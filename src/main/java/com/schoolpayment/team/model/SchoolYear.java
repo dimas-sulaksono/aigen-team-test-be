@@ -7,34 +7,29 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "school_years")
+public class SchoolYear {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "school_year_id")
     private Long id;
 
-    @Column(name = "nis", length = 17, nullable = false)
-    private String nis;
+    @Column(name = "school_year", length = 9, nullable = false, unique = true)
+    private String schoolYear; // Format: "2024/2025"
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -46,11 +41,6 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    // Relasi dengan Student
-    @ManyToOne
-    @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)
-    private Student student;
 
     @PrePersist
     public void onCreate() {

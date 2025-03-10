@@ -53,11 +53,12 @@ CREATE INDEX idx_payment_type_name ON payment_type (payment_type_name);
 -- Tabel Users
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    nis VARCHAR(17) NOT NULL,
+    nis VARCHAR(17),
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) DEFAULT 'USER',
+    image TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL
@@ -145,18 +146,22 @@ INSERT INTO payment_type (payment_type_name) VALUES
 
 -- Seed untuk tabel students
 INSERT INTO students (nis, name, class_id, birthdate, address, phone_number) VALUES
-('12345678901', 'Ahmad', 1, '2007-05-15', 'Jl. Merdeka No.1', '081234567890'),
-('12345678902', 'Budi', 2, '2006-07-20', 'Jl. Pancasila No.2', '081298765432');
+('12345678901', 'Cantika', 1, '2007-05-15', 'Jl. Merdeka No.1', '081234567890'),
+('12345678902', 'Cindy', 2, '2006-07-20', 'Jl. Pancasila No.2', '081298765432');
 
 -- Seed untuk tabel users
+INSERT INTO users (email, name, password, role) values
+('admin@gmail.com', 'Administrator', '$2a$10$U6JT0Tq4t5ZW5f6BAzrVjeOvg/XveN2uszHY2oU7YtyZ3Uy1keGlm', 'ADMIN');
+
 INSERT INTO users (nis, email, name, password, role) VALUES
-('12345678901', 'user1@example.com', 'Ahmad', 'password123', 'USER'),
-('12345678902', 'user2@example.com', 'Budi', 'password123', 'USER');
+('12345678901', 'user1@gmail.com', 'Ahmad', '$2a$10$U6JT0Tq4t5ZW5f6BAzrVjeOvg/XveN2uszHY2oU7YtyZ3Uy1keGlm', 'USER'),
+('12345678902', 'user2@gmail.com', 'Budi', '$2a$10$U6JT0Tq4t5ZW5f6BAzrVjeOvg/XveN2uszHY2oU7YtyZ3Uy1keGlm', 'USER');
+
 
 -- Seed untuk tabel payments
 INSERT INTO payments (payment_name, user_id, student_id, payment_type_id, amount, payment_status, description) VALUES
-('Pembayaran SPP Juli 2023', 1, 1, 1, 500000.00, 'Paid', 'Pembayaran SPP bulan Juli'),
-('Pembayaran UTS Semester 1', 2, 2, 2, 300000.00, 'Pending', 'Pembayaran Ujian Tengah Semester');
+('Pembayaran SPP Juli 2023', 2, 1, 1, 500000.00, 'Paid', 'Pembayaran SPP bulan Juli'),
+('Pembayaran UTS Semester 1', 3, 2, 2, 300000.00, 'Pending', 'Pembayaran Ujian Tengah Semester');
 
 -- Menampilkan data yang telah diinput
 SELECT * FROM school_years;

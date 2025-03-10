@@ -13,28 +13,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "class")
+public class ClassEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "class_id")
     private Long id;
 
-    @Column(name = "nis", length = 17, nullable = false)
-    private String nis;
+    @Column(name = "class_name", nullable = false, length = 100)
+    private String className;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @ManyToOne
+    @JoinColumn(name = "school_year_id", referencedColumnName = "school_year_id", nullable = false)
+    private SchoolYear schoolYear;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -46,11 +38,6 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    // Relasi dengan Student
-    @ManyToOne
-    @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)
-    private Student student;
 
     @PrePersist
     public void onCreate() {

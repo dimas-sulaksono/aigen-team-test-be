@@ -7,34 +7,35 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "students")
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "student_id")
     private Long id;
 
-    @Column(name = "nis", length = 17, nullable = false)
+    @Column(name = "nis", length = 17, unique = true, nullable = false)
     private String nis;
-
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
 
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -47,10 +48,9 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // Relasi dengan Student
     @ManyToOne
-    @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)
-    private Student student;
+    @JoinColumn(name = "class_id", referencedColumnName = "class_id", insertable = false, updatable = false)
+    private ClassEntity classEntity;
 
     @PrePersist
     public void onCreate() {

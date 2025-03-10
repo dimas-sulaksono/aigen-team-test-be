@@ -7,34 +7,32 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "payments")
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "payment_id")
     private Long id;
 
-    @Column(name = "nis", length = 17, nullable = false)
-    private String nis;
+    @Column(name = "payment_name", nullable = false)
+    private String paymentName;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "amount", nullable = false, precision = 10, scale = 2)
+    private BigDecimal amount;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "payment_status", nullable = false)
+    private String paymentStatus;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @Column(name = "description")
+    private String description;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -47,10 +45,20 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // Relasi dengan Student
+    // Relasi ke User
     @ManyToOne
-    @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    private User user;
+
+    // Relasi ke Student
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id", nullable = false)
     private Student student;
+
+    // Relasi ke PaymentType
+    @ManyToOne
+    @JoinColumn(name = "payment_type_id", referencedColumnName = "payment_type_id", nullable = false)
+    private PaymentType paymentType;
 
     @PrePersist
     public void onCreate() {
