@@ -40,7 +40,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
                         corsConfiguration.setAllowCredentials(true);
-                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "*"));
+                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
                         corsConfiguration.setAllowedHeaders(List.of("*"));
                         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         corsConfiguration.setMaxAge(3600L);
@@ -62,10 +62,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/payment-type/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/payment-type/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/payment-type/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/payment/filter").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/search").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/name/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/*").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/payment/*").hasRole("ADMIN")
+
+                        // student
                         .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
+
+
 
                         .requestMatchers(HttpMethod.GET,"/api/product/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/product/**").permitAll()
@@ -80,8 +91,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/school-years/soft-delete").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/school-years/delete").permitAll()
 
-                        //.anyRequest().authenticated()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
+//                        .anyRequest().permitAll()
                 )
                 // ngatur session untuk tidak menyimpan informasi user di dalam session tapi pake jwt
                 .sessionManagement(session -> session

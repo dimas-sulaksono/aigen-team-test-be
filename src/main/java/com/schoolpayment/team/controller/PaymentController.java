@@ -2,9 +2,11 @@ package com.schoolpayment.team.controller;
 
 import com.schoolpayment.team.dto.response.PaymentResponse;
 import com.schoolpayment.team.model.Payment;
+import com.schoolpayment.team.security.CustomUserDetails;
 import com.schoolpayment.team.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,4 +54,13 @@ public class PaymentController {
         return paymentService.updateStatusPayment(id, status);
     }
 
+    @GetMapping("/me")
+    public Page<PaymentResponse> getPaymentByMe(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return paymentService.getPaymentByMe(userDetails.getUser(), name, status, page, size);
+    }
 }

@@ -2,11 +2,9 @@ package com.schoolpayment.team.service;
 
 import com.schoolpayment.team.dto.response.PaymentResponse;
 import com.schoolpayment.team.exception.DataNotFoundException;
-import com.schoolpayment.team.model.ClassEntity;
 import com.schoolpayment.team.model.Payment;
-import com.schoolpayment.team.model.Student;
+import com.schoolpayment.team.model.User;
 import com.schoolpayment.team.repository.PaymentRepository;
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,6 +80,27 @@ public class PaymentService {
         return convertToResponse(updatedPayment);
     }
 
+    public Page<PaymentResponse> getPaymentByMe(User user, String name, String status, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Specification<Payment> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.equal(root.get("user"), user));
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(root.get("paymentType").get("paymentTypeName"), "%" + name + "%"));
+            }
+            if (status != null) {
+                predicates.add(criteriaBuilder.like(root.get("paymentStatus"), "%" + status + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Payment> payments = paymentRepository.findAll(spec, pageable);
+        return payments.map(this::convertToResponse);
+
+    }
+
 
 
     private PaymentResponse convertToResponse(Payment payment) {
@@ -100,6 +119,7 @@ public class PaymentService {
 
         return response;
     }
+
 
 
 }
