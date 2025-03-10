@@ -50,5 +50,4 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled(){
         return user.getDeletedAt() == null; // Akun hanya aktif jika tidak dihapus
     }
-
 }

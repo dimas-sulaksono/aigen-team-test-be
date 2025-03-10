@@ -58,11 +58,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/user/**").permitAll()
 
                         // payment
-                        .requestMatchers(HttpMethod.GET, "/api/payment-type").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/payment-type/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/payment-type/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/payment-type/**").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.GET,"/api/payment-type").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/payment-type/add").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/payment-type/update").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/payment-type/delete").hasRole("ADMIN")
                         //.anyRequest().authenticated()
                         .anyRequest().permitAll()
                 )
