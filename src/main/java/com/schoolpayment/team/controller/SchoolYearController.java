@@ -31,4 +31,10 @@ public class SchoolYearController {
         SchoolYearResponse response = schoolYearService.createSchoolYear(schoolYear);
         return ResponseEntity.ok(new ApiResponse<>(200, response));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateSchoolYear(@PathVariable Long id, @RequestBody @Valid SchoolYearRequest schoolYear) {
+        SchoolYearResponse response = schoolYearService.updateSchoolYear(id, schoolYear);
+        return ResponseEntity.ok(new ApiResponse<>(200, response));
+    }
 }
