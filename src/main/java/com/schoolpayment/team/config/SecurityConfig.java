@@ -64,9 +64,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/payment-type/**").hasRole("ADMIN")
 
                         // school years
-                        .requestMatchers(HttpMethod.GET,"/api/school-years/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/school-years/all").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/school-years/add").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/school-years/update").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/school-years/soft-delete").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/school-years/delete").permitAll()
 
                         //.anyRequest().authenticated()
