@@ -2,13 +2,17 @@ package com.schoolpayment.team.service;
 
 import com.schoolpayment.team.dto.response.PaymentResponse;
 import com.schoolpayment.team.exception.DataNotFoundException;
+import com.schoolpayment.team.model.ClassEntity;
 import com.schoolpayment.team.model.Payment;
+import com.schoolpayment.team.model.Student;
 import com.schoolpayment.team.repository.PaymentRepository;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +25,7 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     public Page<PaymentResponse> getAllPayment(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Payment> payments = paymentRepository.findAll(pageable);
         return payments.map(this::convertToResponse);
     }
@@ -31,31 +35,33 @@ public class PaymentService {
         return convertToResponse(payment);
     }
 
-//    public Page<PaymentResponse> filterPayment(String paymentName, String studentName, String userName, String schoolYear, int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        Specification<Payment> spec = (root, query, criteriaBuilder) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//
-//            if (paymentName != null) {
-//                predicates.add(criteriaBuilder.like(root.get("paymentType"), "%" + paymentName + "%"));
-//            }
-//            if (studentName != null) {
-//                predicates.add(criteriaBuilder.like(root.get("student"), "%" + studentName + "%"));
-//            }
-//            if (userName != null) {
-//                predicates.add(criteriaBuilder.like(root.get("user"), "%" + userName + "%"));
-//            }
-//            if (schoolYear != null) {
-//                predicates.add(criteriaBuilder.like(root.get("schoolYear"), "%" + schoolYear + "%"));
-//            }
-//
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//        };
-//
-//        Page<Payment> payments = paymentRepository.findAll(spec, pageable);
-//        return payments.map(this::convertToResponse);
-//
-//    }
+    public Page<PaymentResponse> filterPayment(String paymentName, String studentName, String userName, String schoolYear, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Specification<Payment> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (paymentName != null) {
+                predicates.add(criteriaBuilder.like(root.get("paymentType").get("paymentTypeName"), "%" + paymentName + "%"));
+            }
+
+            if (studentName != null) {
+                predicates.add(criteriaBuilder.like(root.get("student").get("name"), "%" + studentName + "%"));
+            }
+
+            if (userName != null) {
+                predicates.add(criteriaBuilder.like(root.get("user").get("name"), "%" + userName + "%"));
+            }
+            if (schoolYear != null) {
+                predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Payment> payments = paymentRepository.findAll(spec, pageable);
+        return payments.map(this::convertToResponse);
+
+    }
 
     private PaymentResponse convertToResponse(Payment payment) {
         PaymentResponse response = new PaymentResponse();
