@@ -1,5 +1,6 @@
 package com.schoolpayment.team.util;
 
+import com.schoolpayment.team.exception.CustomJwtException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;

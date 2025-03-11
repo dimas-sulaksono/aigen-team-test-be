@@ -1,0 +1,9 @@
+package com.schoolpayment.team.exception;
+
+import javax.naming.AuthenticationException;
+
+public class CustomJwtException extends AuthenticationException {
+    public CustomJwtException(String message) {
+        super(message);
+    }
+}

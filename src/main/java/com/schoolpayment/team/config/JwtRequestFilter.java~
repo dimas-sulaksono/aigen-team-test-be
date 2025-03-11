@@ -55,19 +55,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 System.out.println("Token expired: " + e.getMessage());
                 request.setAttribute("jwtException", e);
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Token expired\"}");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
                 System.out.println("Invalid token: " + e.getMessage());
                 request.setAttribute("jwtException", e);
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Invalid token\"}");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-
 
         }
 

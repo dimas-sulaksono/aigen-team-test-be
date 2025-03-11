@@ -1,5 +1,6 @@
 package com.schoolpayment.team.config;
 
+import com.schoolpayment.team.exception.JwtAuthenticationEntryPoint;
 import com.schoolpayment.team.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -26,10 +27,12 @@ import java.util.List;
 public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
     private final UserService userService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserService userService){
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserService userService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint){
         this.jwtRequestFilter = jwtRequestFilter;
         this.userService = userService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -104,6 +107,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
