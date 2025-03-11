@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("/api/payment")
@@ -69,5 +71,14 @@ public class PaymentController {
             @Valid @RequestBody PaymentRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         return paymentService.createPayment(request, userDetails.getUser());
+    }
+
+    @GetMapping("/export")
+    public byte[] exportExcel(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String student,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String year) throws IOException {
+        return paymentService.exportExcel(status, student, username, year);
     }
 }
