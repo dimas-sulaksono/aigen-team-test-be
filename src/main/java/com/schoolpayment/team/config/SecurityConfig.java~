@@ -40,7 +40,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
                         corsConfiguration.setAllowCredentials(true);
-                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "*"));
+                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
                         corsConfiguration.setAllowedHeaders(List.of("*"));
                         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         corsConfiguration.setMaxAge(3600L);
@@ -63,19 +63,25 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/payment-type/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/payment-type/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.PUT, "/api/payment/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/payment/name/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/filter").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/all").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/payment/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/payment/name/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/*").authenticated() // get by id and add payment
+                        .requestMatchers(HttpMethod.PUT, "/api/payment/*").hasRole("ADMIN")
+                        // class
+
+                        .requestMatchers(HttpMethod.POST, "/api/class/add").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/class/update/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/class/soft-delete/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/class/delete/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/class/*").authenticated()
 
                         // student
                         .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
-
 
 
                         .requestMatchers(HttpMethod.GET,"/api/product/**").permitAll()
