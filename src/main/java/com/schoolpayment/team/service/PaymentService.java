@@ -10,7 +10,6 @@ import com.schoolpayment.team.model.User;
 import com.schoolpayment.team.repository.PaymentRepository;
 import com.schoolpayment.team.repository.PaymentTypeRepository;
 import com.schoolpayment.team.repository.StudentRepository;
-import com.schoolpayment.team.repository.UserRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -2,7 +2,6 @@ package com.schoolpayment.team.service;
 
 import com.schoolpayment.team.dto.request.LoginRequest;
 import com.schoolpayment.team.dto.request.UserRequest;
-import com.schoolpayment.team.dto.response.ApiResponse;
 import com.schoolpayment.team.dto.response.UserResponse;
 import com.schoolpayment.team.exception.DuplicateDataException;
 import com.schoolpayment.team.exception.InvalidPasswordException;
@@ -10,19 +9,14 @@ import com.schoolpayment.team.exception.UserNotFoundException;
 import com.schoolpayment.team.model.User;
 import com.schoolpayment.team.repository.UserRepository;
 import com.schoolpayment.team.security.CustomUserDetails;
-import com.schoolpayment.team.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 

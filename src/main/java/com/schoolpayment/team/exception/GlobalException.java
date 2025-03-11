@@ -1,8 +1,6 @@
 package com.schoolpayment.team.exception;
 
 import com.schoolpayment.team.dto.response.ApiResponse;
-import io.jsonwebtoken.SignatureException;
-import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,13 +18,13 @@ public class GlobalException {
     private static final Logger logger = LoggerFactory.getLogger(GlobalException.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
         logger.error("Validation error: {}", errors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(400, errors));
     }
 
 
@@ -56,12 +54,6 @@ public class GlobalException {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ApiResponse<String>> handleForbiddenException(ForbiddenException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(403, ex.getMessage()));
-    }
-
-    // invalid token
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ApiResponse<String>> handleSignatureException(SignatureException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(401, ex.getMessage()));
     }
 
     // endpoint not found

@@ -1,8 +1,6 @@
 package com.schoolpayment.team.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -30,6 +28,7 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
+
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -38,8 +37,8 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    Map<String, Object> claims = new HashMap<>();
     public String generateToken(String username, String role) {
+        Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         return Jwts.builder()
                 .setClaims(claims)
@@ -51,8 +50,14 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        try {
+            final String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        } catch (ExpiredJwtException | MalformedJwtException | SignatureException |
+                 UnsupportedJwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
+
 
 }
