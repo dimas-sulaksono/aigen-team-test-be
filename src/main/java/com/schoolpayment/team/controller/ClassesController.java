@@ -4,7 +4,6 @@ import com.schoolpayment.team.dto.request.ClassesRequest;
 import com.schoolpayment.team.dto.response.ApiResponse;
 import com.schoolpayment.team.dto.response.ClassesResponse;
 import com.schoolpayment.team.service.ClassesService;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

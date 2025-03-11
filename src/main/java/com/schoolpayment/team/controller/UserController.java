@@ -5,14 +5,11 @@ import com.schoolpayment.team.dto.request.UserRequest;
 import com.schoolpayment.team.dto.response.ApiResponse;
 import com.schoolpayment.team.dto.response.UserResponse;
 import com.schoolpayment.team.exception.DuplicateDataException;
-import com.schoolpayment.team.repository.UserRepository;
 import com.schoolpayment.team.service.UserService;
 import com.schoolpayment.team.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +23,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // register
     @PostMapping("/register")

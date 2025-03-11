@@ -1,4 +1,0 @@
-package com.schoolpayment.team.exception;
-
-public class JwtException {
-}
