@@ -2,7 +2,6 @@ package com.schoolpayment.team.controller;
 
 import com.schoolpayment.team.dto.request.PaymentRequest;
 import com.schoolpayment.team.dto.response.PaymentResponse;
-import com.schoolpayment.team.model.Payment;
 import com.schoolpayment.team.security.CustomUserDetails;
 import com.schoolpayment.team.service.PaymentService;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
