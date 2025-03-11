@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,17 +28,23 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(400, errors));
     }
 
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ApiResponse<String>> handleIOException(IOException ex) {
+        logger.error("IOException: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, ex.getMessage()));
+    }
+
 
     @ExceptionHandler(DuplicateDataException.class)
-    public ResponseEntity<String> handleDuplicateDataException(DuplicateDataException ex) {
+    public ResponseEntity<ApiResponse<String>> handleDuplicateDataException(DuplicateDataException ex) {
         logger.error("Data already exist: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(409,ex.getMessage()));
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<String> handleDataNotFoundException(DataNotFoundException ex) {
+    public ResponseEntity<ApiResponse<String>> handleDataNotFoundException(DataNotFoundException ex) {
         logger.error("Data not found: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(400, ex.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
