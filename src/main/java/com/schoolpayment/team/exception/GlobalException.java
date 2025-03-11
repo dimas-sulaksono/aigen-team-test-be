@@ -2,7 +2,6 @@ package com.schoolpayment.team.exception;
 
 import com.schoolpayment.team.dto.response.ApiResponse;
 import io.jsonwebtoken.SignatureException;
-import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

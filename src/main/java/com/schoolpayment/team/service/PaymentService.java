@@ -10,7 +10,6 @@ import com.schoolpayment.team.model.User;
 import com.schoolpayment.team.repository.PaymentRepository;
 import com.schoolpayment.team.repository.PaymentTypeRepository;
 import com.schoolpayment.team.repository.StudentRepository;
-import com.schoolpayment.team.repository.UserRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,11 +38,13 @@ public class PaymentService {
     }
 
     public PaymentResponse getPaymentById(Long id) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Payment not found"));
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Payment not found"));
         return convertToResponse(payment);
     }
 
-    public Page<PaymentResponse> filterPayment(String status, String studentName, String userName, String schoolYear, int page, int size) {
+    public Page<PaymentResponse> filterPayment(String status, String studentName, String userName, String schoolYear,
+            int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -60,7 +61,9 @@ public class PaymentService {
                 predicates.add(criteriaBuilder.like(root.get("user").get("name"), "%" + userName + "%"));
             }
             if (schoolYear != null) {
-                predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
+                predicates.add(
+                        criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"),
+                                "%" + schoolYear + "%"));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -84,7 +87,8 @@ public class PaymentService {
     }
 
     public PaymentResponse updateStatusPayment(Long id, String status) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Payment not found"));
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Payment not found"));
         payment.setPaymentStatus(status);
         Payment updatedPayment = paymentRepository.save(payment);
         return convertToResponse(updatedPayment);
@@ -113,8 +117,10 @@ public class PaymentService {
 
     public PaymentResponse createPayment(PaymentRequest request, User user) {
 
-        PaymentType paymentType = paymentTypeRepository.findByPaymentTypeName(request.getPaymentType()).orElseThrow(() -> new DataNotFoundException("Payment type not found"));
-        Student student = studentRepository.findByNis(user.getNis()).orElseThrow(() -> new DataNotFoundException("Student not found"));
+        PaymentType paymentType = paymentTypeRepository.findByPaymentTypeName(request.getPaymentType())
+                .orElseThrow(() -> new DataNotFoundException("Payment type not found"));
+        Student student = studentRepository.findByNis(user.getNis())
+                .orElseThrow(() -> new DataNotFoundException("Student not found"));
 
         Payment payment = new Payment();
         payment.setPaymentName(request.getPaymentName());
@@ -128,8 +134,6 @@ public class PaymentService {
         Payment savedPayment = paymentRepository.save(payment);
         return convertToResponse(savedPayment);
     }
-
-
 
     private PaymentResponse convertToResponse(Payment payment) {
         PaymentResponse response = new PaymentResponse();
@@ -147,7 +151,5 @@ public class PaymentService {
 
         return response;
     }
-
-
 
 }
