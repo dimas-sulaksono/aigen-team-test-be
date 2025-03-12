@@ -47,6 +47,9 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(name = "images",nullable = false)
+    private String images;
+
     // Relasi dengan Student
     @ManyToOne
     @JoinColumn(name = "nis", referencedColumnName = "nis", insertable = false, updatable = false)

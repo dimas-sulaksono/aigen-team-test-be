@@ -12,4 +12,5 @@ public class UserResponse {
     private String role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String images;
 }
