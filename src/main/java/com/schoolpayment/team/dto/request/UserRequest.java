@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UserRequest {
@@ -23,6 +24,6 @@ public class UserRequest {
     @NotBlank(message = "Password tidak boleh kosong")
     @Size(min = 6, message = "Password harus memiliki minimal 6 karakter")
     private String password;
-
+    private MultipartFile images;
     private String role = "USER"; // Default role USER
 }
