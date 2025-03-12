@@ -6,6 +6,7 @@ import com.schoolpayment.team.exception.DataNotFoundException;
 import com.schoolpayment.team.model.Student;
 import com.schoolpayment.team.repository.StudentRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -100,10 +102,10 @@ public class StudentService {
     }
 
     @Transactional
-    public Page<StudentResponse> filterStudentsBySchoolYear(LocalDate startDate, LocalDate endDate, int page, int size) {
+    public Page<StudentResponse> filterStudentsBySchoolYear(String startDate, String endDate, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Student> studentPage = studentRepository.findBySchoolYear(startDate, endDate, pageable);
+            Page<Student> studentPage = studentRepository.findAllByClassEntity_SchoolYear_SchoolYearBetween(startDate, endDate, pageable);
             return studentPage.map(this::convertToStudentResponse);
         } catch (Exception e) {
             throw new RuntimeException("Failed to filter students by school year", e);
