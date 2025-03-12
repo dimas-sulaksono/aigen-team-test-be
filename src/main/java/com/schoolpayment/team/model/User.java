@@ -48,7 +48,7 @@ public class User {
     private LocalDateTime deletedAt;
 
     @Column(name = "images",nullable = false)
-    private String images;
+    private String image;
 
     // Relasi dengan Student
     @ManyToOne
