@@ -57,8 +57,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/user/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/user/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/user/update/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/user/delete/**").permitAll()
 
                         // payment
                         .requestMatchers(HttpMethod.GET, "/api/payment-type").permitAll()
@@ -101,7 +101,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/school-years/delete").permitAll()
 
                         .anyRequest().authenticated()
-//                        .anyRequest().permitAll()
+                        //.anyRequest().permitAll()
                 )
                 // ngatur session untuk tidak menyimpan informasi user di dalam session tapi pake jwt
                 .sessionManagement(session -> session

@@ -47,7 +47,7 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "images",nullable = false)
+    @Column(name = "image")
     private String image;
 
     // Relasi dengan Student

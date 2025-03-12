@@ -24,6 +24,8 @@ public class UserRequest {
     @NotBlank(message = "Password tidak boleh kosong")
     @Size(min = 6, message = "Password harus memiliki minimal 6 karakter")
     private String password;
+
     private MultipartFile image;
+
     private String role = "USER"; // Default role USER
 }
