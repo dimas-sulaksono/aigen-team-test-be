@@ -23,8 +23,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Page<Student> findAllByOrderByNameDesc(Pageable pageable);
 
-    @Query("SELECT s FROM Student s WHERE s.createdAt >= :startDate AND s.createdAt <= :endDate")
-    Page<Student> findBySchoolYear(LocalDate startDate, LocalDate endDate, Pageable pageable);
-
+    Page<Student> findAllByClassEntity_SchoolYear_SchoolYearBetween(String startDate, String endDate, Pageable pageable);
     Optional<Student> findByNis(@NotBlank(message = "NIS tidak boleh kosong") String nis);
 }

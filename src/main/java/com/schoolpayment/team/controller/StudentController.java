@@ -59,10 +59,10 @@ public class StudentController {
     }
 
     // ✅ Filter students by class ID (with pagination)
-    @GetMapping("/filterBySchoolYear")
+    @GetMapping("/filter")
     public ResponseEntity<Page<StudentResponse>> filterStudentsBySchoolYear(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam  String startDate,
+            @RequestParam  String endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<StudentResponse> students = studentService.filterStudentsBySchoolYear(startDate, endDate, page, size);
