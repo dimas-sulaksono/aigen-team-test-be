@@ -8,12 +8,17 @@ import com.schoolpayment.team.exception.DuplicateDataException;
 import com.schoolpayment.team.service.UserService;
 import com.schoolpayment.team.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -28,6 +33,8 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Value("${file.IMAGE_DIR}")
+    private String uploadDir;
 
     // register
     @PostMapping("/register")
@@ -56,7 +63,7 @@ public class UserController {
     }
 
     //update
-    @PutMapping(value = "/{username}", consumes = "multipart/form-data")
+    @PutMapping(value = "/update/{username}", consumes = "multipart/form-data")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable String username,
             @RequestParam(value = "name", required = false) String name,
@@ -87,10 +94,31 @@ public class UserController {
     }
 
     // Get user by username
-    @GetMapping("/username/{username}")
+    @GetMapping("/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
         UserResponse user = userService.findByUserName(username);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/images/{images}")
+    public ResponseEntity<byte[]> getProductsImage(@PathVariable("images") String images) throws IOException {
+        Path path = Paths.get(uploadDir, images);
+
+        if (!Files.exists(path)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] imageBytes = Files.readAllBytes(path);
+        String fileExtension = images.substring(images.lastIndexOf(".") + 1);
+
+        MediaType mediaType = switch (fileExtension.toLowerCase()) {
+            case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
+            case "png" -> MediaType.IMAGE_PNG;
+            case "gif" -> MediaType.IMAGE_GIF;
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
+
+        return ResponseEntity.ok().contentType(mediaType).body(imageBytes);
     }
 
 }
