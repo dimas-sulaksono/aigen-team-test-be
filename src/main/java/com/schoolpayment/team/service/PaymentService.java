@@ -159,7 +159,8 @@ public class PaymentService {
         response.setName(payment.getPaymentName());
         response.setUser(payment.getUser().getId(), payment.getUser().getName());
         response.setStudent(payment.getStudent().getNis(), payment.getStudent().getName());
-        response.setType(payment.getPaymentType());
+        response.setType(payment.getPaymentType().getPaymentTypeName());
+        response.setSchoolYear((payment.getStudent().getClassEntity().getSchoolYear().getSchoolYear()));
         response.setAmount(payment.getAmount());
         response.setStatus(payment.getPaymentStatus());
         response.setDescription(payment.getDescription());
