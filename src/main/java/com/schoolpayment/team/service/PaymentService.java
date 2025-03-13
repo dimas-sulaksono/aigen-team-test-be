@@ -51,18 +51,31 @@ public class PaymentService {
             List<Predicate> predicates = new ArrayList<>();
 
             if (status != null) {
-                predicates.add(criteriaBuilder.like(root.get("paymentStatus"), "%" + status + "%"));
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("paymentStatus")),
+                        "%" + status.toLowerCase() + "%"
+                ));
             }
 
             if (studentName != null) {
-                predicates.add(criteriaBuilder.like(root.get("student").get("name"), "%" + studentName + "%"));
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("student").get("name")),
+                        "%" + studentName.toLowerCase() + "%"
+                ));
             }
 
             if (userName != null) {
-                predicates.add(criteriaBuilder.like(root.get("user").get("name"), "%" + userName + "%"));
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("user").get("name")),
+                        "%" + userName.toLowerCase() + "%"
+                ));
             }
+
             if (schoolYear != null) {
-                predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
+                predicates.add(criteriaBuilder.like(
+                        root.get("student").get("classEntity").get("schoolYear").get("schoolYear"),
+                        "%" + schoolYear + "%"
+                ));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -100,10 +113,10 @@ public class PaymentService {
 
             predicates.add(criteriaBuilder.equal(root.get("user"), user));
             if (name != null) {
-                predicates.add(criteriaBuilder.like(root.get("paymentType").get("paymentTypeName"), "%" + name + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentType").get("paymentTypeName")), "%" + name.toLowerCase() + "%"));
             }
             if (status != null) {
-                predicates.add(criteriaBuilder.like(root.get("paymentStatus"), "%" + status + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentStatus")), "%" + status.toLowerCase() + "%"));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
@@ -135,9 +148,9 @@ public class PaymentService {
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (status != null) predicates.add(criteriaBuilder.like(root.get("paymentStatus"), "%" + status + "%"));
-            if (studentName != null) predicates.add(criteriaBuilder.like(root.get("student").get("name"), "%" + studentName + "%"));
-            if (userName != null) predicates.add(criteriaBuilder.like(root.get("user").get("name"), "%" + userName + "%"));
+            if (status != null) predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentStatus")), "%" + status.toLowerCase() + "%"));
+            if (studentName != null) predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("student").get("name")), "%" + studentName.toLowerCase() + "%"));
+            if (userName != null) predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("user").get("name")), "%" + userName.toLowerCase() + "%"));
             if (schoolYear != null) predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -159,7 +172,8 @@ public class PaymentService {
         response.setName(payment.getPaymentName());
         response.setUser(payment.getUser().getId(), payment.getUser().getName());
         response.setStudent(payment.getStudent().getNis(), payment.getStudent().getName());
-        response.setType(payment.getPaymentType());
+        response.setType(payment.getPaymentType().getPaymentTypeName());
+        response.setSchoolYear((payment.getStudent().getClassEntity().getSchoolYear().getSchoolYear()));
         response.setAmount(payment.getAmount());
         response.setStatus(payment.getPaymentStatus());
         response.setDescription(payment.getDescription());

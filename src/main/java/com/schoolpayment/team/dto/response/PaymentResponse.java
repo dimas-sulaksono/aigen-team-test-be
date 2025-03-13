@@ -12,7 +12,8 @@ public class PaymentResponse {
     private String name;
     private UserPayment user = new UserPayment();
     private StudentPayment student = new StudentPayment();
-    private PaymentType type;
+    private String type;
+    private String schoolYear;
     private BigDecimal amount;
     private String status;
     private String description;
