@@ -5,10 +5,10 @@ SET session_replication_role = 'replica';
 TRUNCATE TABLE 
     payments,
     students,
-    users,
-    payment_type,
-    "class",
-    school_years
+    users
+--    payment_type,
+--    "class",
+--    school_years
 RESTART IDENTITY;
 
 -- Aktifkan kembali constraint foreign key
