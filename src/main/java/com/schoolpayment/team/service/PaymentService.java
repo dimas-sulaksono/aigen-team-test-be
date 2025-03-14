@@ -105,15 +105,18 @@ public class PaymentService {
         return convertToResponse(updatedPayment);
     }
 
-    public Page<PaymentResponse> getPaymentByMe(User user, String name, String status, int page, int size) {
+    public Page<PaymentResponse> getPaymentByMe(User user, String search,String type, String status, int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page -1 , size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(criteriaBuilder.equal(root.get("user"), user));
-            if (name != null) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentType").get("paymentTypeName")), "%" + name.toLowerCase() + "%"));
+            if (search != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentName")), "%" + search.toLowerCase() + "%"));
+            }
+            if (type != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentType").get("paymentTypeName")), "%" + type.toLowerCase() + "%"));
             }
             if (status != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("paymentStatus")), "%" + status.toLowerCase() + "%"));
