@@ -107,7 +107,7 @@ public class PaymentService {
 
     public Page<PaymentResponse> getPaymentByMe(User user, String search,String type, String status, int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page -1 , size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
