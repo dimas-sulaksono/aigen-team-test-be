@@ -62,7 +62,7 @@ public class PaymentController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String status,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size) {
         return paymentService.getPaymentByMe(userDetails.getUser(), search, type, status, page, size);
     }
