@@ -3,7 +3,9 @@ package com.schoolpayment.team.service;
 import com.schoolpayment.team.dto.request.StudentRequest;
 import com.schoolpayment.team.dto.response.StudentResponse;
 import com.schoolpayment.team.exception.DataNotFoundException;
+import com.schoolpayment.team.model.ClassEntity;
 import com.schoolpayment.team.model.Student;
+import com.schoolpayment.team.repository.ClassesRepository;
 import com.schoolpayment.team.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ import java.time.LocalDateTime;
 @Service
 public class StudentService {
 
-    private final StudentRepository studentRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ClassesRepository classesRepository;
 
 
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
+
 
     @Transactional
     public Page<StudentResponse> getAllStudents(int page, int size) {
@@ -36,10 +40,11 @@ public class StudentService {
     @Transactional
     public StudentResponse createStudent(StudentRequest studentRequest) {
         try {
+            ClassEntity classEntity = classesRepository.findById(studentRequest.getClassId()).orElseThrow(() -> new DataNotFoundException("Class not found"));
             Student student = new Student();
             student.setNis(studentRequest.getNis());
             student.setName(studentRequest.getName());
-            student.setClassId(studentRequest.getClassId());
+            student.setClassEntity(classEntity);
             student.setAddress(studentRequest.getAddress());
             student.setPhoneNumber(studentRequest.getPhoneNumber());
             Student savedStudent = studentRepository.save(student);
@@ -146,7 +151,7 @@ public class StudentService {
       StudentResponse response = new StudentResponse(student);
       response.setNis(student.getNis());
       response.setName(student.getName());
-      response.setClassId(student.getClassId());
+      response.setClassName(student.getClassEntity().getClassName());
       response.setBirthdate(student.getBirthdate());
       response.setAddress(student.getAddress());
       response.setPhoneNumber(student.getPhoneNumber());
