@@ -11,7 +11,7 @@ public class StudentResponse {
     private Long id;
     private String nis;
     private String name;
-    private int classId;
+    private String className;
     private LocalDate birthdate;
     private String address;
     private String phoneNumber;
@@ -23,7 +23,7 @@ public class StudentResponse {
         this.id = student.getId();
         this.nis = student.getNis();
         this.name = student.getName();
-        this.classId = student.getClassId();
+        this.className = student.getClassEntity().getClassName();
         this.birthdate = student.getBirthdate();
         this.address = student.getAddress();
         this.phoneNumber = student.getPhoneNumber();
@@ -31,4 +31,5 @@ public class StudentResponse {
         this.updatedAt = student.getUpdatedAt();
         this.deletedAt = student.getDeletedAt();
     }
+
 }
