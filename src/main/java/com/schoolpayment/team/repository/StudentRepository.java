@@ -22,4 +22,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Page<Student> findAllByClassEntity_SchoolYear_SchoolYearBetween(String startDate, String endDate, Pageable pageable);
     Optional<Student> findByNis(@NotBlank(message = "NIS tidak boleh kosong") String nis);
+
+    boolean existsByNis(String nis);
 }
