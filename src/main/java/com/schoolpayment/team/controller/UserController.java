@@ -11,10 +11,17 @@ import com.schoolpayment.team.service.UserService;
 import com.schoolpayment.team.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 @RestController
@@ -27,6 +34,9 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Value("${file.IMAGE_DIR}")
+    private String uploadDir;
 
 
     // register
@@ -68,6 +78,29 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(500, e.getMessage()));
         }
+    }
+
+    // get by id
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id){
+        try {
+            UserResponse userResponse = userService.findUserById(id);
+            return ResponseEntity.ok(new ApiResponse<>(200, userResponse));
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, e.getMessage()));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, e.getMessage()));
+        }
+    }
+
+
+    // get by email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+        UserResponse userResponse = userService.findUserByEmail(email);
+        return ResponseEntity.ok(userResponse);
     }
 
     // filter
@@ -117,6 +150,29 @@ public class UserController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to delete user: "+ e.getMessage()));
         }
+    }
+
+    // get all image
+
+    @GetMapping("/imagesPath/{imagesPath}")
+    public ResponseEntity<byte[]> getProductsImage(@PathVariable("imagesPath") String imagesPath) throws IOException {
+        Path path = Paths.get(uploadDir, imagesPath);
+
+        if (!Files.exists(path)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] imageBytes = Files.readAllBytes(path);
+        String fileExtension = imagesPath.substring(imagesPath.lastIndexOf(".") + 1);
+
+        MediaType mediaType = switch (fileExtension.toLowerCase()) {
+            case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
+            case "png" -> MediaType.IMAGE_PNG;
+            case "gif" -> MediaType.IMAGE_GIF;
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
+
+        return ResponseEntity.ok().contentType(mediaType).body(imageBytes);
     }
 
 }

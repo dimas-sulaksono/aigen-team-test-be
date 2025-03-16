@@ -151,6 +151,33 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    // get by id
+    public UserResponse findUserById(Long id) {
+        try {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new DataNotFoundException("User with ID " + id + " not found"));
+            return convertToResponse(user);
+        } catch (DataNotFoundException e){
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to find user by id: " + e.getMessage(), e);
+        }
+    }
+
+
+    // get By email
+    public UserResponse findUserByEmail(String email) {
+        try {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new DataNotFoundException("User with email " + email + " not found"));
+            return convertToResponse(user);
+        } catch (DataNotFoundException e){
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to find user by email: " + e.getMessage(), e);
+        }
+    }
+
     // filter
     public Page<UserResponse> filterUsersByRole(String role, int page, int size) {
         try {
@@ -207,6 +234,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
     // convert to response
     private UserResponse convertToResponse(User user){
         UserResponse userResponse = new UserResponse();
@@ -220,5 +248,6 @@ public class UserService implements UserDetailsService {
         userResponse.setUpdatedAt(user.getUpdatedAt());
         return userResponse;
     }
+
 
 }
