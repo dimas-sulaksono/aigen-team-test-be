@@ -166,12 +166,25 @@ public class StudentService {
             throw new RuntimeException("Failed to soft delete student", e);
         }
     }
+
+    @Transactional
+    public StudentResponse findByusername(String username) {
+        try {
+            Student student = studentRepository.findByname(username).orElseThrow(() -> new DataNotFoundException("Student not found"));
+            return convertToStudentResponse(student);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get student by username", e);
+        }
+    }
     public StudentResponse convertToStudentResponse(Student student) {
       StudentResponse response = new StudentResponse(student);
       response.setNis(student.getNis());
       response.setName(student.getName());
       response.setClassName(student.getClassEntity().getClassName());
+      response.setClassId(student.getClassEntity().getId());
       response.setBirthdate(student.getBirthdate());
+      response.setStartDate(student.getClassEntity().getSchoolYear().getStartDate());
+      response.setEndDate(student.getClassEntity().getSchoolYear().getEndDate());
       response.setAddress(student.getAddress());
       response.setPhoneNumber(student.getPhoneNumber());
       response.setCreatedAt(student.getCreatedAt());

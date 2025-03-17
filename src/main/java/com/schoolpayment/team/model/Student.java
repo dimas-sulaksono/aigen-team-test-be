@@ -61,4 +61,11 @@ public class Student {
     @PreUpdate
     public void onUpdate() { updatedAt = LocalDateTime.now(); }
 
+    public LocalDate getStartDate() {
+        return classEntity.getSchoolYear().getStartDate();
+    }
+
+    public LocalDate getEndDate() {
+        return classEntity.getSchoolYear().getEndDate();
+    }
 }

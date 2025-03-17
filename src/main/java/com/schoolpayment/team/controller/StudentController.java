@@ -87,4 +87,9 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<StudentResponse> getStudentByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(studentService.findByusername(username));
+    }
 }
