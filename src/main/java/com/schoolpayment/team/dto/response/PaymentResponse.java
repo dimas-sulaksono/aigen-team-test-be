@@ -32,14 +32,3 @@ public class PaymentResponse {
     }
 }
 
-@Data
-class UserPayment {
-    private Long id;
-    private String name;
-}
-
-@Data
-class StudentPayment {
-    private String nis;
-    private String name;
-}

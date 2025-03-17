@@ -1,23 +1,15 @@
 package com.schoolpayment.team.service;
 
 import com.schoolpayment.team.dto.request.PaymentRequest;
-import com.schoolpayment.team.dto.response.ExcelResponse;
-import com.schoolpayment.team.dto.response.PaymentResponse;
+import com.schoolpayment.team.dto.response.*;
 import com.schoolpayment.team.exception.DataNotFoundException;
-import com.schoolpayment.team.model.Payment;
-import com.schoolpayment.team.model.PaymentType;
-import com.schoolpayment.team.model.Student;
-import com.schoolpayment.team.model.User;
-import com.schoolpayment.team.repository.PaymentRepository;
-import com.schoolpayment.team.repository.PaymentTypeRepository;
-import com.schoolpayment.team.repository.StudentRepository;
+import com.schoolpayment.team.model.*;
+import com.schoolpayment.team.repository.*;
 import com.schoolpayment.team.util.ExcelGenerator;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -98,6 +90,7 @@ public class PaymentService {
         return payments.map(this::convertToResponse);
     }
 
+    @Transactional
     public PaymentResponse updateStatusPayment(Long id, String status) {
         Payment payment = paymentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Payment not found"));
         payment.setPaymentStatus(status);
@@ -129,6 +122,14 @@ public class PaymentService {
 
     }
 
+    public StudentPayment getStudent(User user) {
+        if (user.getStudent() == null) throw new DataNotFoundException("user doesn't have student data yet");
+        return new StudentPayment(
+                user.getStudent().getNis(),
+                user.getStudent().getName());
+    }
+
+    @Transactional
     public PaymentResponse createPayment(PaymentRequest request, User user) {
 
         PaymentType paymentType = paymentTypeRepository.findByPaymentTypeName(request.getPaymentType()).orElseThrow(() -> new DataNotFoundException("Payment type not found"));
@@ -205,5 +206,4 @@ public class PaymentService {
 
         return response;
     }
-
 }

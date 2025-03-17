@@ -2,6 +2,7 @@ package com.schoolpayment.team.controller;
 
 import com.schoolpayment.team.dto.request.PaymentRequest;
 import com.schoolpayment.team.dto.response.PaymentResponse;
+import com.schoolpayment.team.dto.response.StudentPayment;
 import com.schoolpayment.team.security.CustomUserDetails;
 import com.schoolpayment.team.service.PaymentService;
 import jakarta.validation.Valid;
@@ -81,5 +82,10 @@ public class PaymentController {
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String year) throws IOException {
         return paymentService.exportExcel(status, student, username, year);
+    }
+
+    @GetMapping("/student")
+    public StudentPayment getStudentPayment(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return paymentService.getStudent(userDetails.getUser());
     }
 }
