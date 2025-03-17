@@ -12,6 +12,7 @@ public class StudentResponse {
     private String nis;
     private String name;
     private String className;
+    private long classId;
     private LocalDate birthdate;
     private String address;
     private String phoneNumber;
@@ -24,6 +25,7 @@ public class StudentResponse {
         this.nis = student.getNis();
         this.name = student.getName();
         this.className = student.getClassEntity().getClassName();
+        this.classId = student.getClassEntity().getId();
         this.birthdate = student.getBirthdate();
         this.address = student.getAddress();
         this.phoneNumber = student.getPhoneNumber();

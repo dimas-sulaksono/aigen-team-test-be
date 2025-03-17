@@ -171,6 +171,7 @@ public class StudentService {
       response.setNis(student.getNis());
       response.setName(student.getName());
       response.setClassName(student.getClassEntity().getClassName());
+      response.setClassId(student.getClassEntity().getId());
       response.setBirthdate(student.getBirthdate());
       response.setAddress(student.getAddress());
       response.setPhoneNumber(student.getPhoneNumber());
