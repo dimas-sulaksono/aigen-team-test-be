@@ -52,6 +52,7 @@ public class StudentService {
             student.setClassEntity(classEntity);
             student.setAddress(studentRequest.getAddress());
             student.setPhoneNumber(studentRequest.getPhoneNumber());
+            student.setBirthdate(studentRequest.getBirthdate());
 
             Student savedStudent = studentRepository.save(student);
 
@@ -71,7 +72,9 @@ public class StudentService {
             if ((studentRequest.getNis() == null || studentRequest.getNis().equals(student.getNis())) &&
                     (studentRequest.getName() == null || studentRequest.getName().equals(student.getName())) &&
                     (studentRequest.getAddress() == null || studentRequest.getAddress().equals(student.getAddress())) &&
-                    (studentRequest.getPhoneNumber() == null || studentRequest.getPhoneNumber().equals(student.getPhoneNumber()))) {
+                    (studentRequest.getPhoneNumber() == null || studentRequest.getPhoneNumber().equals(student.getPhoneNumber()))&&
+                    (studentRequest.getBirthdate() == null || studentRequest.getBirthdate().equals(student.getBirthdate())))
+            {
                 throw new RuntimeException("No changes detected, update not performed");
             }
 
@@ -87,6 +90,10 @@ public class StudentService {
             if (studentRequest.getPhoneNumber() != null && !studentRequest.getPhoneNumber().equals(student.getPhoneNumber())) {
                 student.setPhoneNumber(studentRequest.getPhoneNumber());
             }
+            if (studentRequest.getBirthdate() != null && !studentRequest.getBirthdate().equals(student.getBirthdate())) {
+                student.setBirthdate(studentRequest.getBirthdate());
+            }
+            
 
             Student updatedStudent = studentRepository.save(student);
 
