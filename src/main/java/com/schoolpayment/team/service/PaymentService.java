@@ -138,7 +138,7 @@ public class PaymentService {
         Payment payment = new Payment();
         payment.setPaymentName(request.getPaymentName());
         payment.setAmount(request.getAmount());
-        payment.setPaymentStatus(request.getPaymentStatus());
+        payment.setPaymentStatus("pending");
         payment.setDescription(request.getDescription());
         payment.setUser(user);
         payment.setStudent(student);

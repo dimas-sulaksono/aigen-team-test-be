@@ -15,9 +15,6 @@ public class PaymentRequest {
     @NotNull(message = "Jumlah pembayaran tidak boleh kosong")
     private BigDecimal amount;
 
-    @NotBlank(message = "Status pembayaran tidak boleh kosong")
-    private String paymentStatus;
-
     private String description;
 
     @NotBlank(message = "Jenis pembayaran tidak boleh kosong")
