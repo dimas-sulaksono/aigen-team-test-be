@@ -173,6 +173,8 @@ public class StudentService {
       response.setClassName(student.getClassEntity().getClassName());
       response.setClassId(student.getClassEntity().getId());
       response.setBirthdate(student.getBirthdate());
+      response.setStartDate(student.getClassEntity().getSchoolYear().getStartDate());
+      response.setEndDate(student.getClassEntity().getSchoolYear().getEndDate());
       response.setAddress(student.getAddress());
       response.setPhoneNumber(student.getPhoneNumber());
       response.setCreatedAt(student.getCreatedAt());
