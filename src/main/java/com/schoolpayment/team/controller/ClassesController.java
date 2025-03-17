@@ -48,12 +48,11 @@ public class ClassesController {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchClasses(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String schoolYear,
+            @RequestParam String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        return ResponseEntity.ok().body(classesService.searchClasses(name, schoolYear, page, size));
+        return ResponseEntity.ok().body(classesService.searchClasses(name, page, size));
     }
 
 

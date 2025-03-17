@@ -65,20 +65,9 @@ public class ClassesService {
         return classesRepository.findAll(pageable).map(this::mapToClassesResponse);
     }
 
-    public Page<ClassesResponse> searchClasses(String name, String schoolYear, int page, int size) {
+    public Page<ClassesResponse> searchClasses(String name, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "schoolYear.schoolYear"));
-        Specification<ClassEntity> spec = (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (name != null) {
-                predicates.add(criteriaBuilder.like(root.get("className"), "%" + name + "%"));
-            }
-            if (schoolYear != null) {
-                predicates.add(criteriaBuilder.like(root.get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
-
-        return classesRepository.findAll(spec, pageable).map(this::mapToClassesResponse);
+        return classesRepository.findAllByClassNameContainingIgnoreCase(name,pageable).map(this::mapToClassesResponse);
     }
 
     private ClassesResponse mapToClassesResponse(ClassEntity classesEntity) {
