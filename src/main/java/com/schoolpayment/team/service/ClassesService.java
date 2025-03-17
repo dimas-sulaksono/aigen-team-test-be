@@ -88,7 +88,7 @@ public class ClassesService {
         classesResponse.setYear(classesEntity.getSchoolYear().getSchoolYear());
         classesResponse.setCreatedAt(classesEntity.getCreatedAt());
         classesResponse.setUpdatedAt(classesEntity.getUpdatedAt());
-//        classesResponse.setDeletedAt(classesEntity.getDeletedAt());
+        classesResponse.setDeletedAt(classesEntity.getDeletedAt());
         return classesResponse;
     }
 
