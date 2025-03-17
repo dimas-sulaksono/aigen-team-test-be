@@ -40,50 +40,69 @@ public class StudentService {
     @Transactional
     public StudentResponse createStudent(StudentRequest studentRequest) {
         try {
-            ClassEntity classEntity = classesRepository.findById(studentRequest.getClassId()).orElseThrow(() -> new DataNotFoundException("Class not found"));
+            boolean exists = studentRepository.existsByNis(studentRequest.getNis());
+            if (exists) {
+                throw new RuntimeException("Student with this NIS already exists");
+            }
+            ClassEntity classEntity = classesRepository.findById(studentRequest.getClassId())
+                    .orElseThrow(() -> new DataNotFoundException("Class not found"));
             Student student = new Student();
             student.setNis(studentRequest.getNis());
             student.setName(studentRequest.getName());
             student.setClassEntity(classEntity);
             student.setAddress(studentRequest.getAddress());
             student.setPhoneNumber(studentRequest.getPhoneNumber());
+            student.setBirthdate(studentRequest.getBirthdate());
+
             Student savedStudent = studentRepository.save(student);
+
             return convertToStudentResponse(savedStudent);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create student", e);
         }
     }
 
+
     @Transactional
     public StudentResponse updateStudent(Long id, StudentRequest studentRequest) {
         try {
-            // Cari siswa berdasarkan id
             Student student = studentRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
-            // Update hanya jika nilai ada di request
-            if (studentRequest.getNis() != null) {
-                student.setNis(studentRequest.getNis());
+            if ((studentRequest.getNis() == null || studentRequest.getNis().equals(student.getNis())) &&
+                    (studentRequest.getName() == null || studentRequest.getName().equals(student.getName())) &&
+                    (studentRequest.getAddress() == null || studentRequest.getAddress().equals(student.getAddress())) &&
+                    (studentRequest.getPhoneNumber() == null || studentRequest.getPhoneNumber().equals(student.getPhoneNumber()))&&
+                    (studentRequest.getBirthdate() == null || studentRequest.getBirthdate().equals(student.getBirthdate())))
+            {
+                throw new RuntimeException("No changes detected, update not performed");
             }
-            if (studentRequest.getName() != null) {
+
+            if (studentRequest.getNis() != null && !studentRequest.getNis().equals(student.getNis())) {
+                throw new RuntimeException("NIS cannot be changed");
+            }
+            if (studentRequest.getName() != null && !studentRequest.getName().equals(student.getName())) {
                 student.setName(studentRequest.getName());
             }
-            if (studentRequest.getAddress() != null) {
+            if (studentRequest.getAddress() != null && !studentRequest.getAddress().equals(student.getAddress())) {
                 student.setAddress(studentRequest.getAddress());
             }
-            if (studentRequest.getPhoneNumber() != null) {
+            if (studentRequest.getPhoneNumber() != null && !studentRequest.getPhoneNumber().equals(student.getPhoneNumber())) {
                 student.setPhoneNumber(studentRequest.getPhoneNumber());
             }
+            if (studentRequest.getBirthdate() != null && !studentRequest.getBirthdate().equals(student.getBirthdate())) {
+                student.setBirthdate(studentRequest.getBirthdate());
+            }
+            
 
-            // Simpan perubahan
             Student updatedStudent = studentRepository.save(student);
 
-            // Kembalikan response yang sudah diperbarui
             return convertToStudentResponse(updatedStudent);
         } catch (Exception e) {
             throw new RuntimeException("Failed to update student", e);
         }
     }
+
 
 
     @Transactional
