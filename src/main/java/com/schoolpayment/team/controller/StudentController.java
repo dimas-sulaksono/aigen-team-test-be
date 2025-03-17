@@ -61,8 +61,8 @@ public class StudentController {
     // ✅ Filter students by class ID (with pagination)
     @GetMapping("/filter")
     public ResponseEntity<Page<StudentResponse>> filterStudentsBySchoolYear(
-            @RequestParam  String startDate,
-            @RequestParam  String endDate,
+            @RequestParam (defaultValue = "2020-01-01") String startDate,
+            @RequestParam (defaultValue = "2029-12-31" ) String endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<StudentResponse> students = studentService.filterStudentsBySchoolYear(startDate, endDate, page, size);
