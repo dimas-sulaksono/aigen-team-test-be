@@ -49,7 +49,7 @@ public class Student {
     private LocalDateTime deletedAt;
 
     @ManyToOne
-    @JoinColumn(name = "class_id", referencedColumnName = "class_id", insertable = false, updatable = false)
+    @JoinColumn(name = "class_id", referencedColumnName = "class_id",nullable = false)
     private ClassEntity classEntity;
 
     @PrePersist
