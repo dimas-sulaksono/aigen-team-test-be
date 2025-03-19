@@ -8,17 +8,12 @@ import com.schoolpayment.team.model.ClassEntity;
 import com.schoolpayment.team.model.SchoolYear;
 import com.schoolpayment.team.repository.ClassesRepository;
 import com.schoolpayment.team.repository.SchoolYearRepository;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ClassesService {
@@ -61,12 +56,12 @@ public class ClassesService {
 
     public Page<ClassesResponse> getAllClasses(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "schoolYear.schoolYear"));
-        return classesRepository.findAll(pageable).map(this::mapToClassesResponse);
+        return classesRepository.findAllByOrderByClassNameAsc(pageable).map(this::mapToClassesResponse);
     }
 
     public Page<ClassesResponse> searchClasses(String name, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "schoolYear.schoolYear"));
-        return classesRepository.findAllByClassNameContainingIgnoreCase(name,pageable).map(this::mapToClassesResponse);
+        return classesRepository.findAllByClassNameContainingIgnoreCaseOrderByClassNameAsc(name,pageable).map(this::mapToClassesResponse);
     }
 
     private ClassesResponse mapToClassesResponse(ClassEntity classesEntity) {
