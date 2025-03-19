@@ -16,6 +16,7 @@ public class StudentResponse {
     private LocalDate birthdate;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String schoolYear;
     private String address;
     private String phoneNumber;
     private LocalDateTime createdAt;
@@ -28,6 +29,7 @@ public class StudentResponse {
         this.name = student.getName();
         this.className = student.getClassEntity().getClassName();
         this.classId = student.getClassEntity().getId();
+        this.schoolYear = student.getClassEntity().getSchoolYear().getSchoolYear();
         this.birthdate = student.getBirthdate();
         this.startDate = student.getStartDate();
         this.endDate = student.getEndDate();
@@ -37,5 +39,6 @@ public class StudentResponse {
         this.updatedAt = student.getUpdatedAt();
         this.deletedAt = student.getDeletedAt();
     }
+
 
 }

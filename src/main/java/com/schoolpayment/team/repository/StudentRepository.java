@@ -24,4 +24,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByNis(String nis);
 
    Optional<Student> findByname(String name);
+
+    Page<Student> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
