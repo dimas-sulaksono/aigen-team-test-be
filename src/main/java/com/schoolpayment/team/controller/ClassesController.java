@@ -1,6 +1,7 @@
 package com.schoolpayment.team.controller;
 
 import com.schoolpayment.team.dto.request.ClassesRequest;
+import com.schoolpayment.team.dto.request.UpdateClassesRequest;
 import com.schoolpayment.team.dto.response.ApiResponse;
 import com.schoolpayment.team.dto.response.ClassesResponse;
 import com.schoolpayment.team.service.ClassesService;
@@ -23,7 +24,7 @@ public class ClassesController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateClass(
-            @RequestBody ClassesRequest request,
+            @RequestBody UpdateClassesRequest request,
             @PathVariable Long id) {
         ClassesResponse response = classesService.updateClass(id, request);
         return ResponseEntity.ok().body(new ApiResponse<>(200, response));

@@ -9,6 +9,7 @@ public class ClassesResponse {
     private Long id;
     private String name;
     private String year;
+    private Long yearId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;

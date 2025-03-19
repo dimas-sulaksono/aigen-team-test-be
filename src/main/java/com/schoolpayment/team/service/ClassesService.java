@@ -1,6 +1,7 @@
 package com.schoolpayment.team.service;
 
 import com.schoolpayment.team.dto.request.ClassesRequest;
+import com.schoolpayment.team.dto.request.UpdateClassesRequest;
 import com.schoolpayment.team.dto.response.ClassesResponse;
 import com.schoolpayment.team.exception.DataNotFoundException;
 import com.schoolpayment.team.exception.DuplicateDataException;
@@ -34,12 +35,16 @@ public class ClassesService {
 
     }
 
-    public ClassesResponse updateClass(Long id, ClassesRequest request) {
-        SchoolYear schoolYear = schoolYearRepository.findById(request.getSchoolYearId()).orElseThrow(() -> new DataNotFoundException("School year not found"));
-        if (classesRepository.existsByClassNameIgnoreCaseAndSchoolYear(request.getName(), schoolYear)) throw new DuplicateDataException("Class with this name and school year already exists");
+    public ClassesResponse updateClass(Long id, UpdateClassesRequest request) {
         ClassEntity classesEntity = classesRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Class not found"));
+        if (request.getSchoolYearId() != null) {
+            SchoolYear schoolYear = schoolYearRepository.findById(request.getSchoolYearId()).orElseThrow(() -> new DataNotFoundException("School year not found"));
+            if (classesRepository.existsByClassNameIgnoreCaseAndSchoolYear(request.getName(), schoolYear)) throw new DuplicateDataException("Class with this name and school year already exists");
+            classesEntity.setSchoolYear(schoolYear);
+        } else {
+            if (classesRepository.existsByClassNameIgnoreCaseAndSchoolYear(request.getName(), classesEntity.getSchoolYear())) throw new DuplicateDataException("Class with this name and school year already exists");
+        }
         classesEntity.setClassName(request.getName());
-        classesEntity.setSchoolYear(schoolYear);
         return mapToClassesResponse(classesRepository.save(classesEntity));
     }
 
@@ -69,6 +74,7 @@ public class ClassesService {
         classesResponse.setId(classesEntity.getId());
         classesResponse.setName(classesEntity.getClassName());
         classesResponse.setYear(classesEntity.getSchoolYear().getSchoolYear());
+        classesResponse.setYearId(classesEntity.getSchoolYear().getId());
         classesResponse.setCreatedAt(classesEntity.getCreatedAt());
         classesResponse.setUpdatedAt(classesEntity.getUpdatedAt());
         classesResponse.setDeletedAt(classesEntity.getDeletedAt());
