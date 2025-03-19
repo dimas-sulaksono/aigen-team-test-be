@@ -111,7 +111,6 @@ public class StudentService {
 
 
 
-    @Transactional
     public void deleteStudent(Long id) {
         try {
             studentRepository.deleteById(id);
