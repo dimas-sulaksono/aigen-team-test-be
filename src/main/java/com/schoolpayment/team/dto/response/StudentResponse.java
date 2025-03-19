@@ -27,9 +27,10 @@ public class StudentResponse {
         this.id = student.getId();
         this.nis = student.getNis();
         this.name = student.getName();
-        this.className = student.getClassEntity().getClassName();
-        this.classId = student.getClassEntity().getId();
-        this.schoolYear = student.getClassEntity().getSchoolYear().getSchoolYear();
+        if(student.getClassEntity() != null) {
+            this.className = student.getClassEntity().getClassName();
+            this.classId = student.getClassEntity().getId();
+        }
         this.birthdate = student.getBirthdate();
         this.startDate = student.getStartDate();
         this.endDate = student.getEndDate();

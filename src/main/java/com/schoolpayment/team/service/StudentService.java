@@ -74,9 +74,8 @@ public class StudentService {
                     (studentRequest.getName() == null || studentRequest.getName().equals(student.getName())) &&
                     (studentRequest.getAddress() == null || studentRequest.getAddress().equals(student.getAddress())) &&
                     (studentRequest.getPhoneNumber() == null || studentRequest.getPhoneNumber().equals(student.getPhoneNumber()))&&
-                    (studentRequest.getClassId() == null || studentRequest.getClassId().equals(student.getClassEntity().getId()))&&
-                    (studentRequest.getBirthdate() == null || studentRequest.getBirthdate().equals(student.getBirthdate())))
-
+                    (studentRequest.getBirthdate() == null || studentRequest.getBirthdate().equals(student.getBirthdate()))&&
+                    (studentRequest.getClassId() == null || studentRequest.getClassId().equals(student.getClassEntity().getId())))
             {
                 throw new RuntimeException("No changes detected, update not performed");
             }
@@ -96,7 +95,6 @@ public class StudentService {
             if (studentRequest.getBirthdate() != null && !studentRequest.getBirthdate().equals(student.getBirthdate())) {
                 student.setBirthdate(studentRequest.getBirthdate());
             }
-
             if (studentRequest.getClassId() != null) {
                 ClassEntity classEntity = classesRepository.findById(studentRequest.getClassId())
                         .orElseThrow(() -> new DataNotFoundException("Class not found"));
@@ -196,19 +194,6 @@ public class StudentService {
     }
     public StudentResponse convertToStudentResponse(Student student) {
       StudentResponse response = new StudentResponse(student);
-      response.setNis(student.getNis());
-      response.setName(student.getName());
-      response.setClassName(student.getClassEntity().getClassName());
-      response.setClassId(student.getClassEntity().getId());
-      response.setBirthdate(student.getBirthdate());
-      response.setStartDate(student.getClassEntity().getSchoolYear().getStartDate());
-      response.setEndDate(student.getClassEntity().getSchoolYear().getEndDate());
-      response.setSchoolYear(student.getClassEntity().getSchoolYear().getSchoolYear());
-      response.setAddress(student.getAddress());
-      response.setPhoneNumber(student.getPhoneNumber());
-      response.setCreatedAt(student.getCreatedAt());
-      response.setUpdatedAt(student.getUpdatedAt());
-      response.setDeletedAt(student.getDeletedAt());
       return response;
     }
 
