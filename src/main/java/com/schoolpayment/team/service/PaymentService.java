@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,6 +169,13 @@ public class PaymentService {
         return ExcelGenerator.generateExcel(paymentResponses);
     }
 
+    public BigDecimal sumPaidAmount() {
+        return paymentRepository.sumPaidAmount();
+    }
+
+    public BigDecimal sumPendingAmount(){
+        return paymentRepository.sumPendingAmount();
+    }
 
 
     private PaymentResponse convertToResponse(Payment payment) {

@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 
 @RestController
@@ -87,5 +88,15 @@ public class PaymentController {
     @GetMapping("/student")
     public StudentPayment getStudentPayment(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return paymentService.getStudent(userDetails.getUser());
+    }
+
+    @GetMapping("/get-amount-paid")
+    public BigDecimal sumPaidAmount() {
+        return paymentService.sumPaidAmount();
+    }
+
+    @GetMapping("/get-amount-pending")
+    public BigDecimal sumPendingAmount() {
+        return paymentService.sumPendingAmount();
     }
 }

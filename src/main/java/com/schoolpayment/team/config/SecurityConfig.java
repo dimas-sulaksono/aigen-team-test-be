@@ -70,6 +70,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/payment/filter").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/get-amount-paid").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/payment/get-amount-pending").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/name/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/payment/*").authenticated() // get by id and add payment
                         .requestMatchers(HttpMethod.PUT, "/api/payment/*").hasRole("ADMIN")
@@ -82,10 +84,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/class/*").authenticated() // get all and search
 
                         // student
+<<<<<<< HEAD
                         .requestMatchers(HttpMethod.GET, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/student/**").permitAll()
+=======
+                        .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/student/get-count-students").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
+>>>>>>> 30f5584 (fix dashboard admin)
 
                         .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/product/**").permitAll()
