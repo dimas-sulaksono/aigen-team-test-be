@@ -9,8 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ClassesRepository extends JpaRepository<ClassEntity, Long>, JpaSpecificationExecutor<ClassEntity> {
-    Boolean existsByClassNameAndSchoolYear(@NotBlank String name, SchoolYear schoolYear);
+    Boolean existsByClassNameIgnoreCaseAndSchoolYear(@NotBlank String name, SchoolYear schoolYear);
     Page<ClassEntity> findAllByClassNameContainingIgnoreCase(String name, Pageable pageable);
 }
