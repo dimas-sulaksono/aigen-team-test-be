@@ -13,9 +13,6 @@ public class StudentRequest {
     private Long classId;
     private String address;
     private String phoneNumber;
-
-    public LocalDate getBirthdate() {
-        return LocalDate.now();
-    }
+    private LocalDate birthdate;
 
 }
