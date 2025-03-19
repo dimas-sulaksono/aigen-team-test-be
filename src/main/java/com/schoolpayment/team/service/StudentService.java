@@ -111,7 +111,7 @@ public class StudentService {
     }
 
 
-
+    @Transactional
     public void deleteStudent(Long id) {
         try {
             studentRepository.deleteById(id);
@@ -149,7 +149,6 @@ public class StudentService {
             throw new RuntimeException("Failed to filter students by school year", e);
         }
     }
-
 
     @Transactional
     public Page<StudentResponse> getStudentsSortedByName(String sort, int page, int size) {
@@ -191,6 +190,11 @@ public class StudentService {
             throw new RuntimeException("Failed to get student by username", e);
         }
     }
+
+    public long count() {
+        return studentRepository.count();
+    }
+
     public StudentResponse convertToStudentResponse(Student student) {
       StudentResponse response = new StudentResponse(student);
       return response;

@@ -99,4 +99,9 @@ public class StudentController {
     public ResponseEntity<StudentResponse> getStudentByUsername(@PathVariable String username) {
         return ResponseEntity.ok(studentService.findByusername(username));
     }
+
+    @GetMapping("/get-count-students")
+    public ResponseEntity<Long> getCountStudents() {
+        return ResponseEntity.ok(studentService.count());
+    }
 }
