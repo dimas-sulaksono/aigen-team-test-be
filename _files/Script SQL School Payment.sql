@@ -227,16 +227,6 @@ INSERT INTO payments (payment_name, user_id, student_id, payment_type_id, amount
 ('SPP Juni 2024', 9, 9, 1, 500000.00, 'Paid', 'Pembayaran SPP bulan Juni'),
 ('UAS Semester 2', 10, 10, 3, 300000.00, 'Paid', 'Pembayaran Ujian Akhir Semester 2');
 
-
-TRUNCATE TABLE 
-    payments,
-    students,
-    users
---    payment_type,
---    "class",
---    school_years
-RESTART IDENTITY;
-
 SELECT 
     p.payment_id,
     s.name AS student_name,
