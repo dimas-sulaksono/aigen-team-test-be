@@ -3,6 +3,7 @@ package com.schoolpayment.team.controller;
 import com.schoolpayment.team.dto.request.StudentRequest;
 import com.schoolpayment.team.dto.response.StudentResponse;
 import com.schoolpayment.team.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,7 +39,7 @@ public class StudentController {
     @PutMapping("/update/{id}")
     public ResponseEntity<StudentResponse> updateStudent(
             @PathVariable Long id,
-            @RequestBody StudentRequest studentRequest) {
+            @RequestBody @Valid StudentRequest studentRequest) {
         return ResponseEntity.ok(studentService.updateStudent(id, studentRequest));
     }
 
@@ -61,13 +62,18 @@ public class StudentController {
     // ✅ Filter students by class ID (with pagination)
     @GetMapping("/filter")
     public ResponseEntity<Page<StudentResponse>> filterStudentsBySchoolYear(
-            @RequestParam (defaultValue = "2020-01-01") String startDate,
-            @RequestParam (defaultValue = "2029-12-31" ) String endDate,
+            @RequestParam(defaultValue = "1970-01-01") String startDate,
+            @RequestParam(defaultValue = "2200-12-31") String endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<StudentResponse> students = studentService.filterStudentsBySchoolYear(startDate, endDate, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "asc") String sort) {
+
+        Page<StudentResponse> students = studentService.filterStudentsBySchoolYear(
+                startDate, endDate, page, size, sort);
+
         return ResponseEntity.ok(students);
     }
+
 
     // ✅ Sort students by name (with pagination)
     @GetMapping("/sort")
@@ -78,7 +84,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentsSortedByName( sort,page, size));
     }
 
-    @DeleteMapping("/soft-delete/{id}")
+    @PatchMapping("/soft-delete/{id}")
     public ResponseEntity<String> softDeleteStudent(@PathVariable Long id) {
         try {
             studentService.softDeleteStudent(id);

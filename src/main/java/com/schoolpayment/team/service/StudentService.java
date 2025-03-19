@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -94,7 +95,7 @@ public class StudentService {
             if (studentRequest.getBirthdate() != null && !studentRequest.getBirthdate().equals(student.getBirthdate())) {
                 student.setBirthdate(studentRequest.getBirthdate());
             }
-            if (studentRequest.getClassId() != null && !studentRequest.getClassId().equals(student.getClassEntity().getId())) {
+            if (studentRequest.getClassId() != null) {
                 ClassEntity classEntity = classesRepository.findById(studentRequest.getClassId())
                         .orElseThrow(() -> new DataNotFoundException("Class not found"));
                 student.setClassEntity(classEntity);
@@ -124,7 +125,10 @@ public class StudentService {
     public Page<StudentResponse> searchByName(String name, int page, int size) {
       try{
           Pageable pageable = PageRequest.of( page, size);
-          Page<Student> studentPage = studentRepository.findByName(name, pageable);
+          Page<Student> studentPage = studentRepository.findByNameContainingIgnoreCase(name, pageable);
+          if(studentPage.isEmpty()){
+              return Page.empty();
+          }
           return studentPage.map(this::convertToStudentResponse);
       } catch (Exception e) {
           throw new RuntimeException("Failed to search student", e);
@@ -132,15 +136,21 @@ public class StudentService {
     }
 
     @Transactional
-    public Page<StudentResponse> filterStudentsBySchoolYear(String startDate, String endDate, int page, int size) {
+    public Page<StudentResponse> filterStudentsBySchoolYear(
+            String startDate, String endDate, int page, int size, String sort) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Student> studentPage = studentRepository.findAllByClassEntity_SchoolYear_SchoolYearBetween(startDate, endDate, pageable);
+            Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
+
+            Page<Student> studentPage = studentRepository.findAllByClassEntity_SchoolYear_SchoolYearBetween(
+                    startDate, endDate, pageable);
+
             return studentPage.map(this::convertToStudentResponse);
         } catch (Exception e) {
             throw new RuntimeException("Failed to filter students by school year", e);
         }
     }
+
 
     @Transactional
     public Page<StudentResponse> getStudentsSortedByName(String sort, int page, int size) {
