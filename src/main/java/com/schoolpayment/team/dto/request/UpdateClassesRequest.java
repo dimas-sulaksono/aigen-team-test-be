@@ -9,5 +9,6 @@ public class UpdateClassesRequest {
 
     @NotBlank(message = "Nama kelas tidak boleh kosong")
     private String name;
+
     private Long schoolYearId;
 }
