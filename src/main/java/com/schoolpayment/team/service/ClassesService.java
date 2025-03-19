@@ -30,7 +30,7 @@ public class ClassesService {
 
     public ClassesResponse addNewClass(ClassesRequest request) {
         SchoolYear schoolYear = schoolYearRepository.findById(request.getSchoolYearId()).orElseThrow(() -> new DataNotFoundException("School year not found"));
-        if (classesRepository.existsByClassNameAndSchoolYear(request.getName(), schoolYear)) throw new DuplicateDataException("Class with this name and school year already exists");
+        if (classesRepository.existsByClassNameIgnoreCaseAndSchoolYear(request.getName(), schoolYear)) throw new DuplicateDataException("Class with this name and school year already exists");
 
         ClassEntity classesEntity = new ClassEntity();
         classesEntity.setClassName(request.getName());
@@ -41,9 +41,8 @@ public class ClassesService {
 
     public ClassesResponse updateClass(Long id, ClassesRequest request) {
         SchoolYear schoolYear = schoolYearRepository.findById(request.getSchoolYearId()).orElseThrow(() -> new DataNotFoundException("School year not found"));
+        if (classesRepository.existsByClassNameIgnoreCaseAndSchoolYear(request.getName(), schoolYear)) throw new DuplicateDataException("Class with this name and school year already exists");
         ClassEntity classesEntity = classesRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Class not found"));
-        if (classesEntity.getSchoolYear().equals(schoolYear) && classesEntity.getClassName().equals(request.getName())) throw new DuplicateDataException("Class with this name and school year already exists");
-
         classesEntity.setClassName(request.getName());
         classesEntity.setSchoolYear(schoolYear);
         return mapToClassesResponse(classesRepository.save(classesEntity));

@@ -29,14 +29,15 @@ public class SecurityConfig {
     private final UserService userService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserService userService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint){
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserService userService,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtRequestFilter = jwtRequestFilter;
         this.userService = userService;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(coreCustomizer -> coreCustomizer.configurationSource(new CorsConfigurationSource() {
                     @Override
@@ -54,11 +55,11 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
                         // user
-                        .requestMatchers(HttpMethod.GET,"/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/user/delete/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/delete/**").permitAll()
 
                         // payment
                         .requestMatchers(HttpMethod.GET, "/api/payment-type").permitAll()
@@ -78,35 +79,34 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/class/update/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/class/soft-delete/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/class/delete/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/class/*").authenticated() // get all and search
+                        .requestMatchers(HttpMethod.GET, "/api/class/*").authenticated() // get all and search
 
                         // student
-                        .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/student/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/student/**").permitAll()
 
-
-                        .requestMatchers(HttpMethod.GET,"/api/product/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/product/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/product/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/product/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/product/**").permitAll()
 
                         // school years
-                        .requestMatchers(HttpMethod.GET,"/api/school-years/all").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/school-years/search").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/school-years/add").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/school-years/update").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/school-years/soft-delete").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/school-years/delete").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/school-years/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/school-years/search").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/school-years/add").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/school-years/update").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/school-years/soft-delete").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/school-years/delete").permitAll()
 
                         .anyRequest().authenticated()
-                        //.anyRequest().permitAll()
+                // .anyRequest().permitAll()
                 )
-                // ngatur session untuk tidak menyimpan informasi user di dalam session tapi pake jwt
+                // ngatur session untuk tidak menyimpan informasi user di dalam session tapi
+                // pake jwt
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authenticationProvider(authenticationProvider())
@@ -116,7 +116,7 @@ public class SecurityConfig {
 
     // method bua otentikasi user
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailService());
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -125,19 +125,19 @@ public class SecurityConfig {
 
     // ngambil data user dari database
     @Bean
-    public UserDetailsService userDetailService(){
+    public UserDetailsService userDetailService() {
         return userService::loadUserByUsername;
     }
 
     // buat nge encode passwors
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     //
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
