@@ -1,6 +1,7 @@
 package com.schoolpayment.team.controller;
 
 import com.schoolpayment.team.dto.request.StudentRequest;
+import com.schoolpayment.team.dto.response.ApiResponse;
 import com.schoolpayment.team.dto.response.StudentResponse;
 import com.schoolpayment.team.service.StudentService;
 import jakarta.validation.Valid;
@@ -45,9 +46,9 @@ public class StudentController {
 
     // ✅ Delete student
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<?> deleteClass(@PathVariable Long id) {
         studentService.deleteStudent(id);
-        return ResponseEntity.ok("Student with ID " + id + " deleted successfully");
+        return ResponseEntity.ok().body(new ApiResponse<>(200, "Student deleted successfully"));
     }
 
     // ✅ Search student by name (with pagination)
