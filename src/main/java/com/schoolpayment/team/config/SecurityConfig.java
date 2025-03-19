@@ -84,18 +84,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/class/*").authenticated() // get all and search
 
                         // student
-<<<<<<< HEAD
+
                         .requestMatchers(HttpMethod.GET, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/student/**").permitAll()
-=======
+
                         .requestMatchers(HttpMethod.GET,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/student/get-count-students").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/student/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/student/**").permitAll()
->>>>>>> 30f5584 (fix dashboard admin)
+
 
                         .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/product/**").permitAll()

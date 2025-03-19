@@ -110,12 +110,8 @@ public class StudentService {
         }
     }
 
-<<<<<<< HEAD
 
-
-=======
     @Transactional
->>>>>>> 30f5584 (fix dashboard admin)
     public void deleteStudent(Long id) {
         try {
             studentRepository.deleteById(id);
