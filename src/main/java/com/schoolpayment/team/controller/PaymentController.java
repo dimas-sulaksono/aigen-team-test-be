@@ -23,7 +23,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("/all")
-    public Page<PaymentResponse> getAllPayment(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public Page<PaymentResponse> getAllPayment(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return paymentService.getAllPayment(page, size);
     }
 
@@ -38,18 +38,18 @@ public class PaymentController {
             @RequestParam(required = false) String student,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String year,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return paymentService.filterPayment(status, student, username, year, page, size);
     }
 
     @GetMapping("/name/{name}")
-    public Page<PaymentResponse> getPaymentByName(@PathVariable String name, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public Page<PaymentResponse> getPaymentByName(@PathVariable String name, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return paymentService.filterByName(name, page, size);
     }
 
     @GetMapping("/search")
-    public Page<PaymentResponse> getPaymentByStudentName(@RequestParam String student, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public Page<PaymentResponse> getPaymentByStudentName(@RequestParam String student, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return paymentService.searchPaymentByStudentName(student, page, size);
     }
 
@@ -65,7 +65,7 @@ public class PaymentController {
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         return paymentService.getPaymentByMe(userDetails.getUser(), search, type, status, page, size);
     }
 

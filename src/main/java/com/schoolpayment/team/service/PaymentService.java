@@ -28,7 +28,7 @@ public class PaymentService {
     private StudentRepository studentRepository;
 
     public Page<PaymentResponse> getAllPayment(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Payment> payments = paymentRepository.findAll(pageable);
         return payments.map(this::convertToResponse);
     }
@@ -39,7 +39,7 @@ public class PaymentService {
     }
 
     public Page<PaymentResponse> filterPayment(String status, String studentName, String userName, String schoolYear, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -80,13 +80,13 @@ public class PaymentService {
     }
 
     public Page<PaymentResponse> filterByName(String name, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Payment> payments = paymentRepository.findByPaymentNameContainingIgnoreCase(name, pageable);
         return payments.map(this::convertToResponse);
     }
 
     public Page<PaymentResponse> searchPaymentByStudentName(String name, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Payment> payments = paymentRepository.findByStudent_NameContainingIgnoreCase(name, pageable);
         return payments.map(this::convertToResponse);
     }
