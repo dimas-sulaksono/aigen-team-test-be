@@ -38,7 +38,7 @@ public class PaymentService {
         return convertToResponse(payment);
     }
 
-    public Page<PaymentResponse> filterPayment(String status, String type,  String studentName, String userName, String schoolYear, int page, int size) {
+    public Page<PaymentResponse> filterPayment(String status, String name, String type,  String studentName, String userName, String schoolYear, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -49,6 +49,14 @@ public class PaymentService {
                         "%" + status.toLowerCase() + "%"
                 ));
             }
+
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("paymentName")),
+                        "%" + name.toLowerCase() + "%"
+                ));
+            }
+
 
             if (type != null) {
                 predicates.add(criteriaBuilder.like(
@@ -156,7 +164,7 @@ public class PaymentService {
         return convertToResponse(savedPayment);
     }
 
-    public byte[] exportExcel(String status, String studentName, String userName, String schoolYear) throws IOException {
+    public byte[] exportExcel(String status, String name, String type, String studentName, String userName, String schoolYear) throws IOException {
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -164,7 +172,18 @@ public class PaymentService {
             if (studentName != null) predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("student").get("name")), "%" + studentName.toLowerCase() + "%"));
             if (userName != null) predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("user").get("name")), "%" + userName.toLowerCase() + "%"));
             if (schoolYear != null) predicates.add(criteriaBuilder.like(root.get("student").get("classEntity").get("schoolYear").get("schoolYear"), "%" + schoolYear + "%"));
-
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("paymentName")),
+                        "%" + name.toLowerCase() + "%"
+                ));
+            }
+            if (type != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("paymentType").get("paymentTypeName")),
+                        "%" + type.toLowerCase() + "%"
+                ));
+            }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
 
