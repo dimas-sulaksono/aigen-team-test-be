@@ -155,7 +155,7 @@ public class UserService implements UserDetailsService {
     // get all
     public Page<UserResponse> findAll(int page, int size) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            Pageable pageable = PageRequest.of(page-1, size);
             Page<User> users = userRepository.findAllByOrderByUpdatedAtDesc(pageable);
             return users.map(this::convertToResponse);
         } catch (Exception e) {
