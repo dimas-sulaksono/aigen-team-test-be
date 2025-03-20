@@ -34,13 +34,16 @@ public class PaymentController {
 
     @GetMapping("/filter")
     public Page<PaymentResponse> getPaymentByFilter(
+
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String type,
             @RequestParam(required = false) String student,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String year,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return paymentService.filterPayment(status, student, username, year, page, size);
+        return paymentService.filterPayment(status, name, type, student, username, year, page, size);
     }
 
     @GetMapping("/name/{name}")
@@ -79,10 +82,12 @@ public class PaymentController {
     @GetMapping("/export")
     public byte[] exportExcel(
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String type,
             @RequestParam(required = false) String student,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String year) throws IOException {
-        return paymentService.exportExcel(status, student, username, year);
+        return paymentService.exportExcel(status, name, type, student, username, year);
     }
 
     @GetMapping("/student")
