@@ -104,4 +104,9 @@ public class StudentController {
     public ResponseEntity<Long> getCountStudents() {
         return ResponseEntity.ok(studentService.count());
     }
+
+    @GetMapping("/nis/{nis}")
+    public ResponseEntity<StudentResponse> getStudentByNis(@PathVariable String nis) {
+        return ResponseEntity.ok(studentService.findByNis(nis));
+    }
 }
