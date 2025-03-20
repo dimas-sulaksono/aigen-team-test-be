@@ -67,7 +67,7 @@ public class UserController {
 
     // get all
     @GetMapping("/all")
-    public ResponseEntity<?> findAll(int page, int size){
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size){
         try {
             Page<UserResponse> users = userService.findAll(page, size);
             return ResponseEntity.ok(new ApiResponse<>(200, users));
