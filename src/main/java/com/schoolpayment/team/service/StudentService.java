@@ -190,6 +190,15 @@ public class StudentService {
             throw new RuntimeException("Failed to get student by username", e);
         }
     }
+    @Transactional
+    public  StudentResponse findByNis(String nis) {
+        try {
+            Student student = studentRepository.findByNis(nis).orElseThrow(() -> new DataNotFoundException("Student not found"));
+            return convertToStudentResponse(student);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get student by NIS", e);
+        }
+    }
 
     public long count() {
         return studentRepository.count();
