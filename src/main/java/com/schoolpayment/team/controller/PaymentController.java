@@ -35,12 +35,13 @@ public class PaymentController {
     @GetMapping("/filter")
     public Page<PaymentResponse> getPaymentByFilter(
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String type,
             @RequestParam(required = false) String student,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String year,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return paymentService.filterPayment(status, student, username, year, page, size);
+        return paymentService.filterPayment(status, type, student, username, year, page, size);
     }
 
     @GetMapping("/name/{name}")

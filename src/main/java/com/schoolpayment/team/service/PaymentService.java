@@ -38,7 +38,7 @@ public class PaymentService {
         return convertToResponse(payment);
     }
 
-    public Page<PaymentResponse> filterPayment(String status, String studentName, String userName, String schoolYear, int page, int size) {
+    public Page<PaymentResponse> filterPayment(String status, String type,  String studentName, String userName, String schoolYear, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Payment> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -47,6 +47,13 @@ public class PaymentService {
                 predicates.add(criteriaBuilder.like(
                         criteriaBuilder.lower(root.get("paymentStatus")),
                         "%" + status.toLowerCase() + "%"
+                ));
+            }
+
+            if (type != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("paymentType").get("paymentTypeName")),
+                        "%" + type.toLowerCase() + "%"
                 ));
             }
 
@@ -65,9 +72,9 @@ public class PaymentService {
             }
 
             if (schoolYear != null) {
-                predicates.add(criteriaBuilder.like(
-                        root.get("student").get("classEntity").get("schoolYear").get("schoolYear"),
-                        "%" + schoolYear + "%"
+                predicates.add(criteriaBuilder.equal(
+                        root.get("student").get("classEntity").get("schoolYear").get("id"),
+                         schoolYear
                 ));
             }
 
