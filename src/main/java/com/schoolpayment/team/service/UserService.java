@@ -108,9 +108,14 @@ public class UserService implements UserDetailsService {
     // register
     @Transactional
     public UserResponse registerUser(UserRequest userRequest){
-        if (studentRepository.existsByNis(userRequest.getNis())) {
-            throw new DuplicateDataException("NIS already registered: " + userRequest.getNis());
+        if (!studentRepository.existsByNis(userRequest.getNis())) {
+            throw new DataNotFoundException("NIS not registered");
         }
+
+        Optional<User> existingNis = userRepository.findByNis(userRequest.getNis());
+        if (existingNis.isPresent()) {
+            throw new DuplicateDataException("NIS already registered");}
+
         Optional<User> existingUser = userRepository.findByEmail(userRequest.getEmail());
         if (existingUser.isPresent()) {
             throw new DuplicateDataException("User already exists with username: " + userRequest.getEmail());}
