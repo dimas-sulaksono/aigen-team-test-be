@@ -9,6 +9,7 @@ import com.schoolpayment.team.exception.DuplicateDataException;
 import com.schoolpayment.team.exception.InvalidPasswordException;
 import com.schoolpayment.team.exception.UserNotFoundException;
 import com.schoolpayment.team.model.User;
+import com.schoolpayment.team.repository.StudentRepository;
 import com.schoolpayment.team.repository.UserRepository;
 import com.schoolpayment.team.security.CustomUserDetails;
 import jakarta.transaction.Transactional;
@@ -37,6 +38,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     @Lazy
@@ -104,6 +108,9 @@ public class UserService implements UserDetailsService {
     // register
     @Transactional
     public UserResponse registerUser(UserRequest userRequest){
+        if (studentRepository.existsByNis(userRequest.getNis())) {
+            throw new DuplicateDataException("NIS already registered: " + userRequest.getNis());
+        }
         Optional<User> existingUser = userRepository.findByEmail(userRequest.getEmail());
         if (existingUser.isPresent()) {
             throw new DuplicateDataException("User already exists with username: " + userRequest.getEmail());}
