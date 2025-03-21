@@ -118,7 +118,7 @@ public class UserService implements UserDetailsService {
 
         Optional<User> existingUser = userRepository.findByEmail(userRequest.getEmail());
         if (existingUser.isPresent()) {
-            throw new DuplicateDataException("User already exists with username: " + userRequest.getEmail());}
+            throw new DuplicateDataException("User already exists with email: " + userRequest.getEmail());}
 
         Optional<User> existingEmail = userRepository.findByEmail(userRequest.getEmail());
         if (existingEmail.isPresent()) {
